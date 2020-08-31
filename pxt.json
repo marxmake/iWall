@@ -1,0 +1,25 @@
+{
+    "name": "iWall",
+    "version": "1.0.0",
+    "description": "iWall",
+    "license": "MIT",
+    "dependencies": {
+        "core": "*",
+        "radio": "*"
+    },
+    "files": [
+        "README.md",
+        "main.blocks",
+        "iWall.ts",
+        "main.ts",
+        "_locales/zh-cn/iWall-strings.json"
+    ],
+    "testFiles": [
+        "test.ts"
+    ],
+    "public": true,
+    "supportedTargets": [
+        "microbit"
+    ],
+    "preferredEditor": "blocksprj"
+}
