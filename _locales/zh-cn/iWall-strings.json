@@ -1,14 +1,25 @@
 {
     "iWall.iWall_Init|block": "iWall 初始化",
-    "iWall.iWall_SensorInit|block": "iWall 传感器初始化 |%sensor|",
-    "iWall.iWall_SensorGet|block": "iWall 传感器数值获取 |%sensor|",
-    "iWall.iWall_LEDMatrixShow|block": "iWall 点阵屏更新显示",
-    "iWall.iWall_LEDMatrixClear|block": "iWall 清空画布",
+
+    "iWall.iWall_createCharacter|block": "创建角色 名称%name|图形%type|X%x|Y%y|层级%level",
+    "iWall.iWall_deleteCharacter|block": "删除角色 %name",
+    "iWall.iWall_characterMove|block": "角色%name|移动%n",
+    "iWall.iWall_characterTrun|block": "角色%name|%turn",
+    "iWall.iWall_characterSetDirect|block": "角色%name|朝向%dir",
+    "iWall.iWall_characterSetEdgeMode|block": "角色%name|遇到边缘 Mode%mode",
+    "iWall.iWall_characterSetXY|block": "角色%name|设置X%x|Y%y",
+    "iWall.iWall_characterSetXYOffset|block": "角色%name|X偏移X%x|Y偏移%y",
+    "iWall.iWall_characterSetVisible|block": "角色%name|%state",
+    
+    "iWall.iWall_SensorInit|block": "传感器初始化 |%sensor|",
+    "iWall.iWall_SensorGet|block": "传感器数值获取 |%sensor|",
+    "iWall.iWall_LEDMatrixShow|block": "点阵屏更新显示",
+    "iWall.iWall_LEDMatrixClear|block": "清空画布",
     "iWall.iWall_RGB|block": "红|%r 绿|%g 蓝|%b",
-    "iWall.iWall_LEDMatrixSetPixel|block": "iWall 点阵屏设置像素 X|%x Y|%y 颜色|%rgb",
-    "iWall.iWall_LEDMatrixLine|block": "iWall 画直线 起 X|%x0|Y|%y0|止 X|%x1|Y|%y1|颜色|%rgb",
-    "iWall.iWall_LEDMatrixRect|block": "iWall 画矩形 左上 X|%x0|Y|%y0|右下 X|%x1|Y|%y1|颜色|%rgb|模式|%mode|",
-    "iWall.iWall_LEDMatrixShift|block": "iWall 画面移动 方向|%dir|格数|%num|",
+    "iWall.iWall_LEDMatrixSetPixel|block": "画点 X|%x Y|%y 颜色|%rgb",
+    "iWall.iWall_LEDMatrixLine|block": "画直线 起 X|%x0|Y|%y0|止 X|%x1|Y|%y1|颜色|%rgb",
+    "iWall.iWall_LEDMatrixRect|block": "画矩形 左上 X|%x0|Y|%y0|右下 X|%x1|Y|%y1|颜色|%rgb|模式|%mode|",
+    "iWall.iWall_LEDMatrixShift|block": "画面移动 方向|%dir|格数|%num|",
     
     "iWall.SENSOR.PM2_5|block": "PM2.5传感器",
     "iWall.SENSOR.TEMP_HUMI|block": "温湿度传感器",
@@ -43,5 +54,17 @@
     "iWall.DIRECT.LEFT|block": "左",
     "iWall.DIRECT.RIGHT|block": "右",
     "iWall.DIRECT.UP|block": "上",
-    "iWall.DIRECT.DOWN|block": "下"
+    "iWall.DIRECT.DOWN|block": "下",
+
+    "iWall.TURN.LEFT|block": "左转",
+    "iWall.TURN.RIGHT|block": "右转",
+
+    "iWall.VISIBILITY.VISIBLE|block": "显示",
+    "iWall.VISIBILITY.INVISIBLE|block": "隐藏",
+
+    "iWall.EDGE_MODE.OVER|block": "飞出",
+    "iWall.EDGE_MODE.HALT|block": "停止",
+    "iWall.EDGE_MODE.REBOUND|block": "反弹",
+    "iWall.EDGE_MODE.INTERLINK|block": "另一侧飞出"
+
 }

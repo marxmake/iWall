@@ -3,92 +3,99 @@
  * 想了解更详细的信息，请前往 https://makecode.microbit.org/blocks/custom
  */
 
+const MATRIX_WIDTH = 34;
+const MATRIX_HEIGHT = 30;
+const X_MIN = 0;
+const X_MAX = 33;
+const Y_MIN = 0;
+const Y_MAX = 29;
+
 
 //% weight=3
-//% color=#9900CC
+//% color=#eeaa00
 //% icon="\uf00a"
-//% groups="['Sensors', 'LED Matrix', 'Play Music']"
+//% groups="['传感器', '绘图', '角色', '背景', '音乐']"
 namespace iWall {
 
     export enum SENSOR {
         //% blockId="PM2_5" block="PM2.5"
-        PM2_5       = 0,
+        PM2_5 = 0,
         //% blockId="TEMP_HUMI" block="Temp & Humi"
-        TEMP_HUMI   = 1,
+        TEMP_HUMI = 1,
         //% blockId="ULTRASONIC" block="Ultrasonic"
-        ULTRASONIC  = 2,
+        ULTRASONIC = 2,
         //% blockId="BODY_TEMP" block="body temp"
-        BODY_TEMP   = 3,
+        BODY_TEMP = 3,
         //% blockId="RFID" block="RFID"
-        RFID        = 4,
+        RFID = 4,
         //% blockId="TOUCH_KEY" block="Touch Key"
-        TOUCH_KEY   = 5,
+        TOUCH_KEY = 5,
         //% blockId="LUMINATION" block="Lumination"
-        LUMINATION  = 6,
+        LUMINATION = 6,
         //% blockId="COLOR" block="Color"
-        COLOR       = 7,
+        COLOR = 7,
         //% blockId="HEART_RATE" block="Heart Rate"
-        HEART_RATE  = 8,
+        HEART_RATE = 8,
         //% blockId="GESTURE" block="Gesture"
-        GESTURE     = 9,
+        GESTURE = 9,
         //% blockId="MAGNET" block="Magnet"
-        MAGNET      = 10,
+        MAGNET = 10,
         //% blockId="PRESSURE" block="Pressure"
-        PRESSURE    = 11
+        PRESSURE = 11
     }
     
     export enum SENSOR_DATA {
         //% blockId="PM2_5" block="PM2.5"
-        PM2_5       = 0,
+        PM2_5 = 0,
         //% blockId="TEMP" block="Temp"
-        TEMP        = 1,
+        TEMP = 1,
         //% blockId="HUMI" block="Humi"
-        HUMI        = 12,
+        HUMI = 12,
         //% blockId="ULTRASONIC" block="Ultrasonic"
-        ULTRASONIC  = 2,
+        ULTRASONIC = 2,
         //% blockId="BODY_TEMP" block="body temp"
-        BODY_TEMP   = 3,
+        BODY_TEMP = 3,
         //% blockId="RFID" block="RFID"
-        RFID        = 4,
+        RFID = 4,
         //% blockId="TOUCH_KEY" block="Touch Key"
-        TOUCH_KEY   = 5,
+        TOUCH_KEY = 5,
         //% blockId="LUMINATION" block="Lumination"
-        LUMINATION  = 6,
+        LUMINATION = 6,
         //% blockId="COLOR" block="Color"
-        COLOR       = 7,
+        COLOR = 7,
         //% blockId="HEART_RATE" block="Heart Rate"
-        HEART_RATE  = 8,
+        HEART_RATE = 8,
         //% blockId="GESTURE" block="Gesture"
-        GESTURE     = 9,
+        GESTURE = 9,
         //% blockId="MAGNET" block="Magnet"
-        MAGNET      = 10,
+        MAGNET = 10,
         //% blockId="PRESSURE" block="Pressure"
-        PRESSURE    = 11
+        PRESSURE = 11
     }
     
     export enum RECT_MODE {
         //% blockId="BORDER" block="Border"
-        BORDER  = 0,
+        BORDER = 0,
         //% blockId="FILL" block="Fill"
-        FILL    = 1
+        FILL = 1
     }
 
     export enum DIRECT {
-        //% blockId="LEFT" block="Left"
-        LEFT    = 0,
-        //% blockId="RIGHT" block="Right"
-        RIGHT   = 1,
         //% blockId="UP" block="Up"
-        UP      = 2,
+        UP = 0,
         //% blockId="DOWN" block="Down"
-        DOWN    = 3
+        DOWN = 1,
+        //% blockId="LEFT" block="Left"
+        LEFT = 2,
+        //% blockId="RIGHT" block="Right"
+        RIGHT = 3
     }
-    
+
 	/**
 	 * iWall初始化，必须执行该函数，放在所有函数之前执行，建议放入“当开机时”最上位置。
 	*/
     //% blockId=iWall_Init block="iWall Init"
-    //% weight=200
+    //% weight=250
     //% group=""
     export function iWall_Init(): void {
         serial.redirect(
@@ -97,10 +104,305 @@ namespace iWall {
             BaudRate.BaudRate115200
         );
         basic.pause(100)
-        serial.writeString("Hello, iWall!\r\n");
+        serial.readString();
+        if (sendCommand("iWall_Init\r\n") == "OK") {}
+    }
+
+    export enum TURN {
+        //% blockId="TURN_LEFT" block="Turn Left"
+        LEFT = 0,
+        //% blockId="TURN_RIGHT" block="Turn Right"
+        RIGHT = 1
+    }
+
+    export enum VISIBILITY {
+        //% blockId="VISIBLE" block="Visible"
+        VISIBLE = 1,
+        //% blockId="FALSE" block="Invisible"
+        INVISIBLE = 0
+    }
+
+    export function sendCommand(cmd: string): string{
+        serial.readString();
+        serial.writeString(cmd);
+        return serial.readLine();
+    }
+
+    export enum EDGE_MODE {
+        //% blockId="OVER" block="Over"
+        OVER = 0,
+        //% blockId="HALT" block="Halt"
+        HALT = 1,
+        //% blockId="REBOUND" block="Rebound"
+        REBOUND = 2,
+        //% blockId="INTERLINK" block="Interlink"
+        INTERLINK = 3
+    }
+
+    export class Character {
+        name: string;
+        number: number;
+        x: number;
+        y: number;
+        width: number;
+        height: number;
+        level: number;
+        edgeMode: EDGE_MODE = EDGE_MODE.HALT;
+        direct: DIRECT = DIRECT.UP;
+        visible: VISIBILITY = VISIBILITY.VISIBLE;
+
+        constructor(name: string, type: number, x: number, y: number, level: number) {
+            this.name = name;
+            this.number = charactorType.PARAM[type][charactorType.CHARACTOR_NUMBER];
+            this.x = x;
+            this.y = y;
+            this.level = level;
+            this.width = charactorType.PARAM[type][charactorType.CHARACTOR_WIDTH];
+            this.height = charactorType.PARAM[type][charactorType.CHARACTOR_HEIGHT];
+        }
+
+        set setType(type: number) {
+            this.number = charactorType.PARAM[type][charactorType.CHARACTOR_NUMBER];
+            this.width = charactorType.PARAM[type][charactorType.CHARACTOR_WIDTH];
+            this.height = charactorType.PARAM[type][charactorType.CHARACTOR_HEIGHT];
+        }
+        
+        set setX(x: number) { this.x = x; }
+        get getX() { return this.x; }
+
+        set setY(y: number) { this.y = y; }
+        get getY() { return this.y; }
+
+        get getWidth() { return this.width; }
+
+        get getHeight() { return this.height; }
+        
+        set setLevel(level: number) { this.level = level; }
+        get getLevel() { return this.level; }
+        
+        set setDirect(direct: DIRECT) { this.direct = direct; }
+        get getDirect() { return this.direct; }
+        
+        set setVisible(visible: VISIBILITY) { this.visible = visible; }
+        get getVisible() { return this.visible; }
+    }
+    
+    let charactors: Character[] = [];
+
+    export function getCharactorEntity(name: string): Character{
+        for (let i of charactors) {
+            if (i.name == name) return i;
+        }
+        return null;
     }
 
 	/**
+	 * 创建一个新角色。
+     * @param name the new charactor's name, eg: "name"
+	*/
+    //% blockId=iWall_createCharacter block="New Character Name%name|Type%type|X%x|Y%y|Level%level"
+    //% weight=208
+    //% level.min=0 level.max=255
+    //% group="角色"
+    //% inlineInputMode=inline
+    export function iWall_createCharacter(
+        name: string,
+        type: charactorType.NAME,
+        x: number,
+        y: number,
+        level: number): void {
+        charactors.push(new Character(name, type, x, y, level));
+        if (sendCommand(
+            "char_New:\"" +
+            name + '\",' +
+            convertToText(type) + ',' +
+            convertToText(x) + ',' +
+            convertToText(y) + ',' +
+            convertToText(level) + 
+            "\r\n") == "OK") { }
+    }
+
+	/**
+	 * 删除角色。
+     * @param name the new charactor's name, eg: "name"
+	*/
+    //% blockId=iWall_deleteCharacter block="Delete Character Name%name"
+    //% weight=207
+    //% group="角色"
+    //% inlineInputMode=inline
+    export function iWall_deleteCharacter(name: string): void {
+        let i = 0;
+        for (let char of charactors) {
+            if (char.name == name) {
+                if (sendCommand(
+                    "char_Delete:\"" +
+                    name + '\",' + "\r\n") == "OK") { }
+                charactors.splice(i, 1);
+            }
+            i++;
+        }
+
+    }
+
+	/**
+	 * 角色朝着当前方向移动N步。
+     * @param name the new charactor's name, eg: "name"
+	*/
+    //% blockId=iWall_characterMove block="Character%name|Move%n"
+    //% weight=206
+    //% group="角色"
+    //% inlineInputMode=inline
+    export function iWall_characterMove(name: string, n: number): void {
+        if (n == 0) return;
+
+        let char = getCharactorEntity(name);
+
+        switch (char.direct) {
+            case DIRECT.UP: char.y -= n; break;
+            case DIRECT.DOWN: char.y += n; break;
+            case DIRECT.LEFT: char.x -= n; break;
+            case DIRECT.RIGHT: char.x += n; break;
+        }
+
+        switch (char.edgeMode) {
+            case EDGE_MODE.OVER:
+                break;
+            case EDGE_MODE.HALT:
+                if (char.x < X_MIN) char.x = X_MIN;
+                if (char.x > X_MAX) char.x = X_MAX;
+                if (char.y < Y_MIN) char.y = Y_MIN;
+                if (char.y > Y_MAX) char.y = Y_MAX;
+                break;
+            case EDGE_MODE.REBOUND:
+                if (char.x < X_MIN) { char.x = - char.x - 1; char.direct = DIRECT.DOWN }
+                if (char.x > X_MAX) { char.x = 2 * X_MAX - char.x + 1; char.direct = DIRECT.UP }
+                if (char.y < Y_MIN) { char.y = - char.y - 1; char.direct = DIRECT.RIGHT }
+                if (char.y > Y_MAX) { char.y = 2 * Y_MAX - char.y + 1; char.direct = DIRECT.LEFT }
+                break;
+            case EDGE_MODE.INTERLINK:
+                char.x >= X_MIN ? char.x %= MATRIX_WIDTH : char.x = char.x % MATRIX_WIDTH + MATRIX_WIDTH;
+                char.y >= Y_MIN ? char.x %= MATRIX_HEIGHT : char.x = char.x % MATRIX_HEIGHT + MATRIX_HEIGHT;
+                break;
+        }
+
+        if (sendCommand("char_Move:\"" + name + '\",' + convertToText(n) + "\r\n") == "OK") { }
+    }
+
+	/**
+	 * 角色转弯。
+     * @param name the new charactor's name, eg: "name"
+	*/
+    //% blockId=iWall_characterTrun block="Character%name|Turn%turn"
+    //% weight=205
+    //% group="角色"
+    //% inlineInputMode=inline
+    export function iWall_characterTrun(name: string, turn: TURN): void {
+        let char = getCharactorEntity(name);
+        
+        if (turn == TURN.LEFT) {
+            switch (char.direct) {
+                case DIRECT.UP: char.direct -= DIRECT.LEFT; break;
+                case DIRECT.DOWN: char.direct -= DIRECT.RIGHT; break;
+                case DIRECT.LEFT: char.direct -= DIRECT.DOWN; break;
+                case DIRECT.RIGHT: char.direct -= DIRECT.UP; break;
+            }
+        } else {
+            switch (char.direct) {
+                case DIRECT.UP: char.direct -= DIRECT.RIGHT; break;
+                case DIRECT.DOWN: char.direct -= DIRECT.LEFT; break;
+                case DIRECT.LEFT: char.direct -= DIRECT.UP; break;
+                case DIRECT.RIGHT: char.direct -= DIRECT.DOWN; break;
+            }
+        }
+
+        if (sendCommand("char_SetDir:\"" + name + '\",' + convertToText(char.direct) + "\r\n") == "OK") { }
+    }
+
+	/**
+	 * 角色设置方向。
+     * @param name the new charactor's name, eg: "name"
+	*/
+    //% blockId=iWall_characterSetDirect block="Character%name|Set%dir"
+    //% weight=204
+    //% group="角色"
+    //% inlineInputMode=inline
+    export function iWall_characterSetDirect(name: string, dir: DIRECT): void {
+        let char = getCharactorEntity(name);
+        char.direct = dir;
+
+        if (sendCommand("char_SetDir:\"" + name + '\",' + convertToText(char.direct) + "\r\n") == "OK") { }
+    }
+
+	/**
+	 * 角色设置碰到边界处理方法。
+     * @param name the new charactor's name, eg: "name"
+	*/
+    //% blockId=iWall_characterSetEdgeMode block="Character%name|Edge Mode%mode"
+    //% weight=203
+    //% group="角色"
+    //% inlineInputMode=inline
+    export function iWall_characterSetEdgeMode(name: string, mode: EDGE_MODE): void {
+        let char = getCharactorEntity(name);
+        char.edgeMode = mode;
+
+        if (sendCommand("char_EdgeMode:\"" + name + '\",' + convertToText(char.edgeMode) + "\r\n") == "OK") { }
+    }
+
+	/**
+	 * 角色设置位置。
+     * @param name the new charactor's name, eg: "name"
+	*/
+    //% blockId=iWall_characterSetXY block="Character%name|X%x|Y%y"
+    //% weight=202
+    //% group="角色"
+    //% inlineInputMode=inline
+    export function iWall_characterSetXY(name: string, x: number, y: number): void {
+        let char = getCharactorEntity(name);
+        char.x = x;
+        char.y = y;
+
+        if (sendCommand(
+            "char_SetXY:\"" + name + '\",' +
+            convertToText(char.x) + ',' +
+            convertToText(char.y) + "\r\n") == "OK") { }
+    }
+
+	/**
+	 * 角色设置位置偏移。
+     * @param name the new charactor's name, eg: "name"
+	*/
+    //% blockId=iWall_characterSetXYOffset block="Character%name|Offset X%x|Y%y"
+    //% weight=201
+    //% group="角色"
+    //% inlineInputMode=inline
+    export function iWall_characterSetXYOffset(name: string, x: number, y: number): void {
+        let char = getCharactorEntity(name);
+        char.x += x;
+        char.y += y;
+
+        if (sendCommand(
+            "char_SetXY:\"" + name + '\",' +
+            convertToText(char.x) + ',' +
+            convertToText(char.y) + "\r\n") == "OK") { }
+    }
+
+	/**
+	 * 角色设置可见。
+     * @param name the new charactor's name, eg: "name"
+	*/
+    //% blockId=iWall_characterSetVisible block="Character%name|Visibility %state"
+    //% weight=200
+    //% group="角色"
+    //% inlineInputMode=inline
+    export function iWall_characterSetVisible(name: string, state: VISIBILITY): void {
+        let char = getCharactorEntity(name);
+        char.visible = state;
+
+        if (sendCommand(
+            "char_Visible:\"" + name + '\",' + convertToText(state) + "\r\n") == "OK") { }
+    }
+
+    /**
 	 * iWall的传感器单元初始化，需要放在“当开机时”中。
 	*/
     //% blockId=iWall_SensorInit block="iWall Sensor Init |%sensor|"
@@ -109,12 +411,7 @@ namespace iWall {
     //% sensor.fieldEditor="gridpicker" sensor.fieldOptions.columns=3
     //% sensor.fieldOptions.tooltips="false"
     export function iWall_SensorInit(sensor: SENSOR): void {
-        let tmp_str = "sensor_Init:" + convertToText(sensor) + "\r\n";
-        serial.writeString(tmp_str);
-        tmp_str = serial.readLine();
-        if (tmp_str == "OK") {
-
-        }
+        if (sendCommand("sensor_Init:" + convertToText(sensor) + "\r\n") == "OK") { }
     }
 
 	/**                              
@@ -129,9 +426,7 @@ namespace iWall {
         let idx = sensor;
         let data = 0;
         if (sensor == SENSOR_DATA.HUMI) idx = SENSOR_DATA.TEMP;
-        let tmp_str = "sensor_Get:" + convertToText(idx) + "\r\n";
-        serial.writeString(tmp_str);
-        tmp_str = serial.readLine();
+        let tmp_str = sendCommand("sensor_Get:" + convertToText(idx) + "\r\n");
         if ((tmp_str.charAt(0) == 'O') && (tmp_str.charAt(1) == 'K')) {
             let len = 0;
             let tmp_char;
@@ -163,46 +458,30 @@ namespace iWall {
         return data;
     }
 
-	/**
-	 * WriteData to PinA or PinB
-	 * @param pin [0-1] choose PinA or PinB; eg: 0, 1
-     * @param value [0-255] pulse of servo; eg: 128, 0, 255
-	*/
-    //% blockId=WritePin block="Set P |%pin| value |%value|"
-    //% weight=75
-    //% value.min=0 value.max=255
-    //% rgb.shadow="colorNumberPicker"
+	// /**                              
+	//  * iWall点阵屏显示，使用绘画功能之后（如画直线），需要使用该函数来更新显示内容。
+	// */
+    // //% blockId=iWall_LEDMatrixShow block="iWall LED Matrix Show"
+    // //% weight=197
+    // //% group="绘图"
+    // export function iWall_LEDMatrixShow(): void {
+    //     let tmp_str = "ledMatrix_Show\r\n";
+    //     serial.readString();
+    //     serial.writeString(tmp_str);
+    //     tmp_str = serial.readLine();
+    //     if (tmp_str == "OK") {
 
-	/**                              
-	 * iWall点阵屏显示，使用绘画功能之后（如画直线），需要使用该函数来更新显示内容。
-	*/
-    //% blockId=iWall_LEDMatrixShow block="iWall LED Matrix Show"
-    //% weight=197
-    //% group="点阵屏"
-    export function iWall_LEDMatrixShow(): void {
-        let tmp_str = "ledMatrix_Show\r\n";
-        serial.readString();
-        serial.writeString(tmp_str);
-        tmp_str = serial.readLine();
-        if (tmp_str == "OK") {
-
-        }
-    }
+    //     }
+    // }
 
 	/**                              
 	 * iWall点阵屏清空画布，需要清除屏，请再使用点阵显示函数。
 	*/
     //% blockId=iWall_LEDMatrixClear block="iWall LED Matrix Clear Canvas"
     //% weight=196
-    //% group="点阵屏"
+    //% group="绘图"
     export function iWall_LEDMatrixClear(): void {
-        let tmp_str = "ledMatrix_Clear\r\n";
-        serial.readString();
-        serial.writeString(tmp_str);
-        tmp_str = serial.readLine();
-        if (tmp_str == "OK") {
-
-        }
+        if (sendCommand("ledMatrix_Clear\r\n") == "OK") { }
     }
 
     /** 
@@ -213,7 +492,7 @@ namespace iWall {
     //% g.min=0 g.max=255
     //% b.min=0 b.max=255
     //% blockId=iWall_RGB block="red|%r green|%g blue|%b"
-    //% group="点阵屏"
+    //% group="绘图"
     export function iWall_RGB(r: number, g: number, b: number): number {
         return (r << 16) + (g << 8) + (b);
     }
@@ -225,28 +504,22 @@ namespace iWall {
     //% x.min=0 x.max=33
     //% y.min=0 y.max=29
     //% rgb.shadow="colorNumberPicker"
-    //% blockId=iWall_LEDMatrixSetPixel block="iWall Set Pixel X|%x Y|%y Color|%rgb"
-    //% group="点阵屏"
+    //% blockId=iWall_LEDMatrixSetPixel block="iWall Set Pixel X%x|Y%y|Color%rgb"
+    //% group="绘图"
     export function iWall_LEDMatrixSetPixel(x: number, y: number, rgb: number): void {
         let r = rgb >> 16;
         let g = (rgb >> 8) & 0xFF;
         let b = (rgb) & 0xFF;
 
-        let tmp_str =
+        if (sendCommand(
             "ledMatrix_Dot:" +
             convertToText(x) + ',' +
             convertToText(y) + ',' +
             convertToText(r) + ',' +
             convertToText(g) + ',' +
             convertToText(b) + 
-            "\r\n";
-        serial.readString();
-        serial.writeString(tmp_str);
-        tmp_str = serial.readLine();
-        if (tmp_str == "OK") {
-
+            "\r\n") == "OK") { }
         }
-    }
 
     /**
      * iWall点阵屏绘制直线
@@ -258,14 +531,14 @@ namespace iWall {
     //% y1.min=0 y1.max=29
     //% rgb.shadow="colorNumberPicker"
     //% blockId=iWall_LEDMatrixLine block="iWall Draw Line Start X|%x0|Y|%y0|End X|%x1|Y|%y1|Color|%rgb|"
-    //% group="点阵屏"
+    //% group="绘图"
     //% inlineInputMode=inline
     export function iWall_LEDMatrixLine(x0: number, y0: number, x1: number, y1: number, rgb: number): void {
         let r = rgb >> 16;
         let g = (rgb >> 8) & 0xFF;
         let b = (rgb) & 0xFF;
 
-        let tmp_str =
+        if (sendCommand(
             "ledMatrix_Line:" +
             convertToText(x0) + ',' +
             convertToText(y0) + ',' +
@@ -274,14 +547,8 @@ namespace iWall {
             convertToText(r) + ',' +
             convertToText(g) + ',' +
             convertToText(b) + 
-            "\r\n";
-        serial.readString();
-        serial.writeString(tmp_str);
-        tmp_str = serial.readLine();
-        if (tmp_str == "OK") {
-
+            "\r\n") == "OK") { }
         }
-    }
 
     /**
      * iWall点阵屏绘制矩形
@@ -293,14 +560,14 @@ namespace iWall {
     //% y1.min=0 y1.max=29
     //% rgb.shadow="colorNumberPicker"
     //% blockId=iWall_LEDMatrixRect block="iWall Draw Line Left-Top X|%x0|Y|%y0|Right-Bottom X|%x1|Y|%y1|Color|%rgb|Mode|%mode|"
-    //% group="点阵屏"
+    //% group="绘图"
     //% inlineInputMode=inline
     export function iWall_LEDMatrixRect(x0: number, y0: number, x1: number, y1: number, rgb: number, mode: RECT_MODE): void {
         let r = rgb >> 16;
         let g = (rgb >> 8) & 0xFF;
         let b = (rgb) & 0xFF;
 
-        let tmp_str =
+        if (sendCommand(
             "ledMatrix_Rect:" +
             convertToText(x0) + ',' +
             convertToText(y0) + ',' +
@@ -310,14 +577,8 @@ namespace iWall {
             convertToText(g) + ',' +
             convertToText(b) + ',' +
             convertToText(mode) + 
-            "\r\n";
-        serial.readString();
-        serial.writeString(tmp_str);
-        tmp_str = serial.readLine();
-        if (tmp_str == "OK") {
-
+            "\r\n")== "OK") { }
         }
-    }
 
     /**
      * iWall点阵屏绘制矩形
@@ -325,20 +586,14 @@ namespace iWall {
      */
     //% weight=191
     //% blockId=iWall_LEDMatrixShift block="iWall Shift Direct|%dir| Number|%num|"
-    //% group="点阵屏"
+    //% group="绘图"
     //% inlineInputMode=inline
     export function iWall_LEDMatrixShift(dir: DIRECT, num: number): void {
-        let tmp_str =
+        if (sendCommand(
             "ledMatrix_Shift:" +
             convertToText(dir) + ',' +
             convertToText(num) + ',' +
-            "\r\n";
-        serial.readString();
-        serial.writeString(tmp_str);
-        tmp_str = serial.readLine();
-        if (tmp_str == "OK") {
-
+            "\r\n") == "OK") { }
         }
-    }
 }
 
