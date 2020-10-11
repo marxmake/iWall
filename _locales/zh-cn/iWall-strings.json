@@ -9,6 +9,8 @@
     "iWall.iWall_characterSetEdgeMode|block": "角色%name|遇到边缘 Mode%mode",
     "iWall.iWall_characterSetXY|block": "角色%name|设置X%x|Y%y",
     "iWall.iWall_characterSetXYOffset|block": "角色%name|X偏移X%x|Y偏移%y",
+    "iWall.iWall_characterGetXY|block": "角色%name|获得%axis|坐标",
+    "iWall.iWall_characterGetDirect|block": "角色%name|的方向",
     "iWall.iWall_characterSetVisible|block": "角色%name|%state",
     
     "iWall.iWall_SensorInit|block": "传感器初始化 |%sensor|",

@@ -108,6 +108,13 @@ namespace iWall {
         if (sendCommand("iWall_Init\r\n") == "OK") {}
     }
 
+    export enum AXIS {
+        //% blockId="X" block="X"
+        X = 0,
+        //% blockId="Y" block="Y"
+        Y = 1
+    }
+
     export enum TURN {
         //% blockId="TURN_LEFT" block="Turn Left"
         LEFT = 0,
@@ -147,7 +154,7 @@ namespace iWall {
         width: number;
         height: number;
         level: number;
-        edgeMode: EDGE_MODE = EDGE_MODE.HALT;
+        edgeMode: EDGE_MODE = EDGE_MODE.OVER;
         direct: DIRECT = DIRECT.UP;
         visible: VISIBILITY = VISIBILITY.VISIBLE;
 
@@ -201,7 +208,7 @@ namespace iWall {
      * @param name the new charactor's name, eg: "name"
 	*/
     //% blockId=iWall_createCharacter block="New Character Name%name|Type%type|X%x|Y%y|Level%level"
-    //% weight=208
+    //% weight=209
     //% level.min=0 level.max=255
     //% group="角色"
     //% inlineInputMode=inline
@@ -227,7 +234,7 @@ namespace iWall {
      * @param name the new charactor's name, eg: "name"
 	*/
     //% blockId=iWall_deleteCharacter block="Delete Character Name%name"
-    //% weight=207
+    //% weight=208
     //% group="角色"
     //% inlineInputMode=inline
     export function iWall_deleteCharacter(name: string): void {
@@ -249,7 +256,7 @@ namespace iWall {
      * @param name the new charactor's name, eg: "name"
 	*/
     //% blockId=iWall_characterMove block="Character%name|Move%n"
-    //% weight=206
+    //% weight=207
     //% group="角色"
     //% inlineInputMode=inline
     export function iWall_characterMove(name: string, n: number): void {
@@ -293,7 +300,7 @@ namespace iWall {
      * @param name the new charactor's name, eg: "name"
 	*/
     //% blockId=iWall_characterTrun block="Character%name|Turn%turn"
-    //% weight=205
+    //% weight=206
     //% group="角色"
     //% inlineInputMode=inline
     export function iWall_characterTrun(name: string, turn: TURN): void {
@@ -301,17 +308,17 @@ namespace iWall {
         
         if (turn == TURN.LEFT) {
             switch (char.direct) {
-                case DIRECT.UP: char.direct -= DIRECT.LEFT; break;
-                case DIRECT.DOWN: char.direct -= DIRECT.RIGHT; break;
-                case DIRECT.LEFT: char.direct -= DIRECT.DOWN; break;
-                case DIRECT.RIGHT: char.direct -= DIRECT.UP; break;
+                case DIRECT.UP: char.direct = DIRECT.LEFT; break;
+                case DIRECT.DOWN: char.direct = DIRECT.RIGHT; break;
+                case DIRECT.LEFT: char.direct = DIRECT.DOWN; break;
+                case DIRECT.RIGHT: char.direct = DIRECT.UP; break;
             }
         } else {
             switch (char.direct) {
-                case DIRECT.UP: char.direct -= DIRECT.RIGHT; break;
-                case DIRECT.DOWN: char.direct -= DIRECT.LEFT; break;
-                case DIRECT.LEFT: char.direct -= DIRECT.UP; break;
-                case DIRECT.RIGHT: char.direct -= DIRECT.DOWN; break;
+                case DIRECT.UP: char.direct = DIRECT.RIGHT; break;
+                case DIRECT.DOWN: char.direct = DIRECT.LEFT; break;
+                case DIRECT.LEFT: char.direct = DIRECT.UP; break;
+                case DIRECT.RIGHT: char.direct = DIRECT.DOWN; break;
             }
         }
 
@@ -323,7 +330,7 @@ namespace iWall {
      * @param name the new charactor's name, eg: "name"
 	*/
     //% blockId=iWall_characterSetDirect block="Character%name|Set%dir"
-    //% weight=204
+    //% weight=205
     //% group="角色"
     //% inlineInputMode=inline
     export function iWall_characterSetDirect(name: string, dir: DIRECT): void {
@@ -338,7 +345,7 @@ namespace iWall {
      * @param name the new charactor's name, eg: "name"
 	*/
     //% blockId=iWall_characterSetEdgeMode block="Character%name|Edge Mode%mode"
-    //% weight=203
+    //% weight=204
     //% group="角色"
     //% inlineInputMode=inline
     export function iWall_characterSetEdgeMode(name: string, mode: EDGE_MODE): void {
@@ -353,7 +360,7 @@ namespace iWall {
      * @param name the new charactor's name, eg: "name"
 	*/
     //% blockId=iWall_characterSetXY block="Character%name|X%x|Y%y"
-    //% weight=202
+    //% weight=203
     //% group="角色"
     //% inlineInputMode=inline
     export function iWall_characterSetXY(name: string, x: number, y: number): void {
@@ -372,7 +379,7 @@ namespace iWall {
      * @param name the new charactor's name, eg: "name"
 	*/
     //% blockId=iWall_characterSetXYOffset block="Character%name|Offset X%x|Y%y"
-    //% weight=201
+    //% weight=202
     //% group="角色"
     //% inlineInputMode=inline
     export function iWall_characterSetXYOffset(name: string, x: number, y: number): void {
@@ -384,6 +391,43 @@ namespace iWall {
             "char_SetXY:\"" + name + '\",' +
             convertToText(char.x) + ',' +
             convertToText(char.y) + "\r\n") == "OK") { }
+    }
+
+	/**
+	 * 获得角色坐标。
+     * @param name the new charactor's name, eg: "name"
+	*/
+    //% blockId=iWall_characterGetXY block="Character%name|Get%asix"
+    //% weight=201
+    //% group="角色"
+    //% inlineInputMode=inline
+    export function iWall_characterGetXY(name: string, axis: AXIS): number {
+        let char = getCharactorEntity(name);
+        return axis == AXIS.X ? char.x : char.y;
+    }
+
+	/**
+	 * 获得角色方向。
+     * @param name the new charactor's name, eg: "name"
+	*/
+    //% blockId=iWall_characterGetDirect block="Character%name|Get Direct"
+    //% weight=201
+    //% group="角色"
+    //% inlineInputMode=inline
+    export function iWall_characterGetDirect(name: string): DIRECT {
+        let char = getCharactorEntity(name);
+        return char.direct;
+    }
+
+	/**
+	 * 方向。
+	*/
+    //% blockId=iWall_direct block="%dir"
+    //% weight=201
+    //% group="角色"
+    //% inlineInputMode=inline
+    export function iWall_direct(dir: DIRECT): DIRECT {
+        return dir;
     }
 
 	/**
