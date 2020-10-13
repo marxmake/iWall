@@ -108,11 +108,63 @@ namespace iWall {
         if (sendCommand("iWall_Init\r\n") == "OK") {}
     }
 
+    let time_millis = control.millis();
+
+	/**
+	 * 获取计时器的数值。
+	*/
+    //% blockId=iWall_GetTimer block="Get Time(millis)"
+    //% weight=249
+    //% group=""
+    export function iWall_GetTimeMillis(): number {
+        return control.millis() - time_millis;
+    }
+
+	/**
+	 * 清零计时器的数值。
+	*/
+    //% blockId=iWall_ClearTimer block="Get Time(millis)"
+    //% weight=248
+    //% group=""
+    export function iWall_ClearTimer() {
+        time_millis = control.millis();
+    }
+
     export enum AXIS {
         //% blockId="X" block="X"
         X = 0,
         //% blockId="Y" block="Y"
         Y = 1
+    }
+
+    export enum GRAPHDIRECT {
+        //% blockId="UP" block="Graph Up"
+        UP = 0,
+        //% blockId="DOWN" block="Graph Down"
+        DOWN = 1,
+        //% blockId="LEFT" block="Graph Left"
+        LEFT = 2,
+        //% blockId="RIGHT" block="Graph Right"
+        RIGHT = 3
+    }
+
+    export enum MOTIONDIRECT {
+        //% blockId="UP" block="Move Up"
+        UP = 0,
+        //% blockId="DOWN" block="Move Down"
+        DOWN = 1,
+        //% blockId="LEFT" block="Move Left"
+        LEFT = 2,
+        //% blockId="RIGHT" block="Move Right"
+        RIGHT = 3,
+        //% blockId="LEFT_UP" block="Move Left-Up"
+        LEFT_UP = 4,
+        //% blockId="RIGHT_UP" block="Move Right-Up"
+        RIGHT_UP = 5,
+        //% blockId="LEFT_DOWN" block="Move Left-Down"
+        LEFT_DOWN = 6,
+        //% blockId="RIGHT_DOWN" block="Move Right-Down"
+        RIGHT_DOWN = 7
     }
 
     export enum TURN {
@@ -129,12 +181,6 @@ namespace iWall {
         INVISIBLE = 0
     }
 
-    export function sendCommand(cmd: string): string{
-        serial.readString();
-        serial.writeString(cmd);
-        return serial.readLine();
-    }
-
     export enum EDGE_MODE {
         //% blockId="OVER" block="Over"
         OVER = 0,
@@ -142,309 +188,440 @@ namespace iWall {
         HALT = 1,
         //% blockId="REBOUND" block="Rebound"
         REBOUND = 2,
-        //% blockId="INTERLINK" block="Interlink"
-        INTERLINK = 3
+        // //% blockId="INTERLINK" block="Interlink"
+        // INTERLINK = 3
+    }
+
+    export enum LAYER_MODE {
+        //% blockId="TOP" block="Top Layer"
+        TOP = 0,
+        //% blockId="PREVIOUS" block="Previous Layer"
+        PREVIOUS = 1,
+        //% blockId="LATTER" block="Latter Layer"
+        LATTER = 2,
+        // //% blockId="BOTTOM" block="Bottom Layer"
+        BOTTOM = 3
+    }
+
+    export enum FLIP {
+        //% blockId="VERTICAL" block="Vertical"
+        VERTICAL = 0,
+        //% blockId="HORIZONTAL" block="Horizontal"
+        HORIZONTAL = 1
+    }
+
+    export enum FLIP_MODE {
+        //% blockId="NONE" block="None"
+        NONE = 0,
+        //% blockId="VERTICAL" block="Vertical"
+        VERTICAL = 1,
+        //% blockId="HORIZONTAL" block="Horizontal"
+        HORIZONTAL = 2,
+        //% blockId="BOTH" block="Both"
+        BOTH = 3
+    }
+
+    export function sendCommand(cmd: string): string{
+        serial.readString();
+        serial.writeString(cmd);
+        return serial.readLine();
     }
 
     export class Character {
-        name: string;
-        number: number;
+        type: characterType.NAME;
         x: number;
         y: number;
-        width: number;
-        height: number;
-        level: number;
+        graphDirect: GRAPHDIRECT = GRAPHDIRECT.UP;
+        motionDirect: MOTIONDIRECT = MOTIONDIRECT.UP;
         edgeMode: EDGE_MODE = EDGE_MODE.OVER;
-        direct: DIRECT = DIRECT.UP;
-        visible: VISIBILITY = VISIBILITY.VISIBLE;
 
-        constructor(name: string, type: number, x: number, y: number, level: number) {
-            this.name = name;
-            this.number = charactorType.PARAM[type][charactorType.CHARACTOR_NUMBER];
+        constructor(type: characterType.NAME, x: number, y: number) {
+            this.type = type;
             this.x = x;
             this.y = y;
-            this.level = level;
-            this.width = charactorType.PARAM[type][charactorType.CHARACTOR_WIDTH];
-            this.height = charactorType.PARAM[type][charactorType.CHARACTOR_HEIGHT];
         }
-
-        set setType(type: number) {
-            this.number = charactorType.PARAM[type][charactorType.CHARACTOR_NUMBER];
-            this.width = charactorType.PARAM[type][charactorType.CHARACTOR_WIDTH];
-            this.height = charactorType.PARAM[type][charactorType.CHARACTOR_HEIGHT];
-        }
-        
-        set setX(x: number) { this.x = x; }
-        get getX() { return this.x; }
-
-        set setY(y: number) { this.y = y; }
-        get getY() { return this.y; }
-
-        get getWidth() { return this.width; }
-
-        get getHeight() { return this.height; }
-        
-        set setLevel(level: number) { this.level = level; }
-        get getLevel() { return this.level; }
-        
-        set setDirect(direct: DIRECT) { this.direct = direct; }
-        get getDirect() { return this.direct; }
-        
-        set setVisible(visible: VISIBILITY) { this.visible = visible; }
-        get getVisible() { return this.visible; }
     }
-    
+
     let charactors: Character[] = [];
-
-    export function getCharactorEntity(name: string): Character{
-        for (let i of charactors) {
-            if (i.name == name) return i;
-        }
-        return null;
-    }
-
+ 
+    
 	/**
 	 * 创建一个新角色。
-     * @param name the new charactor's name, eg: "name"
 	*/
-    //% blockId=iWall_createCharacter block="New Character Name%name|Type%type|X%x|Y%y|Level%level"
-    //% weight=209
-    //% level.min=0 level.max=255
+    //% blockId=iWall_createCharacter block="New Character Type%type|X%x|Y%y"
+    //% weight=220
     //% group="角色"
     //% inlineInputMode=inline
     export function iWall_createCharacter(
-        name: string,
-        type: charactorType.NAME,
+        type: characterType.NAME,
         x: number,
-        y: number,
-        level: number): void {
-        charactors.push(new Character(name, type, x, y, level));
+        y: number): Character {
+        
+        let char = new Character(type, x, y);
+        charactors.push(char);
+        
         if (sendCommand(
-            "char_New:\"" +
-            name + '\",' +
+            "char_New:" +
             convertToText(type) + ',' +
             convertToText(x) + ',' +
-            convertToText(y) + ',' +
-            convertToText(level) + 
-            "\r\n") == "OK") { }
-    }
-
-	/**
-	 * 删除角色。
-     * @param name the new charactor's name, eg: "name"
-	*/
-    //% blockId=iWall_deleteCharacter block="Delete Character Name%name"
-    //% weight=208
-    //% group="角色"
-    //% inlineInputMode=inline
-    export function iWall_deleteCharacter(name: string): void {
-        let i = 0;
-        for (let char of charactors) {
-            if (char.name == name) {
-                if (sendCommand(
-                    "char_Delete:\"" +
-                    name + '\",' + "\r\n") == "OK") { }
-                charactors.splice(i, 1);
-            }
-            i++;
-        }
-
+            convertToText(y) + "\r\n") == "OK") { }
+        
+        return char;
     }
 
 	/**
 	 * 角色朝着当前方向移动N步。
-     * @param name the new charactor's name, eg: "name"
+     * @param n the number of step to move, eg: 1, -1
 	*/
-    //% blockId=iWall_characterMove block="Character%name|Move%n"
-    //% weight=207
+    //% blockId=iWall_characterMove block="Character%char|Move%n"
+    //% weight=219
     //% group="角色"
     //% inlineInputMode=inline
-    export function iWall_characterMove(name: string, n: number): void {
+    export function iWall_characterMove(char: Character, n: number): void {
         if (n == 0) return;
 
-        let char = getCharactorEntity(name);
-
-        switch (char.direct) {
-            case DIRECT.UP: char.y -= n; break;
-            case DIRECT.DOWN: char.y += n; break;
-            case DIRECT.LEFT: char.x -= n; break;
-            case DIRECT.RIGHT: char.x += n; break;
+        switch (char.motionDirect) {
+            case MOTIONDIRECT.UP: char.y -= n; break;
+            case MOTIONDIRECT.DOWN: char.y += n; break;
+            case MOTIONDIRECT.LEFT: char.x -= n; break;
+            case MOTIONDIRECT.RIGHT: char.x += n; break;
+            case MOTIONDIRECT.LEFT_UP: char.x -= n; char.y -= n; break;
+            case MOTIONDIRECT.RIGHT_UP: char.x += n; char.y -= n; break;
+            case MOTIONDIRECT.LEFT_DOWN: char.x -= n; char.y += n; break;
+            case MOTIONDIRECT.RIGHT_DOWN: char.x += n; char.y += n; break;
         }
 
         switch (char.edgeMode) {
             case EDGE_MODE.OVER:
                 break;
             case EDGE_MODE.HALT:
-                if (char.x < X_MIN) char.x = X_MIN;
-                if (char.x > X_MAX) char.x = X_MAX;
-                if (char.y < Y_MIN) char.y = Y_MIN;
-                if (char.y > Y_MAX) char.y = Y_MAX;
+                let excessX = 0, excessY = 0;
+                if (char.x < X_MIN) excessX -= char.x;
+                if (char.x > X_MAX) excessX = X_MAX - char.x;
+                if (char.y < Y_MIN) excessY -= char.y;
+                if (char.y > Y_MAX) excessY = Y_MAX - char.y;
+                if (excessX != 0 || excessY != 0) {
+                    if (Math.abs(excessX) > Math.abs(excessY)) {
+                        char.x += excessX; char.y += excessX;
+                    } else {
+                        char.x += excessY; char.y += excessY;
+                    }
+                }
                 break;
             case EDGE_MODE.REBOUND:
-                if (char.x < X_MIN) { char.x = - char.x - 1; char.direct = DIRECT.DOWN }
-                if (char.x > X_MAX) { char.x = 2 * X_MAX - char.x + 1; char.direct = DIRECT.UP }
-                if (char.y < Y_MIN) { char.y = - char.y - 1; char.direct = DIRECT.RIGHT }
-                if (char.y > Y_MAX) { char.y = 2 * Y_MAX - char.y + 1; char.direct = DIRECT.LEFT }
-                break;
-            case EDGE_MODE.INTERLINK:
-                char.x >= X_MIN ? char.x %= MATRIX_WIDTH : char.x = char.x % MATRIX_WIDTH + MATRIX_WIDTH;
-                char.y >= Y_MIN ? char.x %= MATRIX_HEIGHT : char.x = char.x % MATRIX_HEIGHT + MATRIX_HEIGHT;
+                if (char.x < X_MIN) {
+                    char.x = - char.x - 1;
+                    switch (char.motionDirect) {
+                        case MOTIONDIRECT.LEFT: char.motionDirect = MOTIONDIRECT.RIGHT; break;
+                        case MOTIONDIRECT.LEFT_UP: char.motionDirect = MOTIONDIRECT.RIGHT_UP; break;
+                        case MOTIONDIRECT.LEFT_DOWN: char.motionDirect = MOTIONDIRECT.RIGHT_DOWN; break;
+                    }
+                }
+                if (char.x > X_MAX) {
+                    char.x = 2 * X_MAX - char.x + 1;
+                    switch (char.motionDirect) {
+                        case MOTIONDIRECT.RIGHT: char.motionDirect = MOTIONDIRECT.LEFT; break;
+                        case MOTIONDIRECT.RIGHT_UP: char.motionDirect = MOTIONDIRECT.LEFT_UP; break;
+                        case MOTIONDIRECT.RIGHT_DOWN: char.motionDirect = MOTIONDIRECT.LEFT_DOWN; break;
+                    }
+                }
+                if (char.y < Y_MIN) {
+                    char.y = - char.y - 1;
+                    switch (char.motionDirect) {
+                        case MOTIONDIRECT.UP: char.motionDirect = MOTIONDIRECT.DOWN; break;
+                        case MOTIONDIRECT.LEFT_UP: char.motionDirect = MOTIONDIRECT.LEFT_DOWN; break;
+                        case MOTIONDIRECT.RIGHT_UP: char.motionDirect = MOTIONDIRECT.RIGHT_DOWN; break;
+                    }
+                }
+                if (char.y > Y_MAX) {
+                    char.y = 2 * Y_MAX - char.y + 1;
+                    switch (char.motionDirect) {
+                        case MOTIONDIRECT.DOWN: char.motionDirect = MOTIONDIRECT.DOWN; break;
+                        case MOTIONDIRECT.LEFT_DOWN: char.motionDirect = MOTIONDIRECT.LEFT_UP; break;
+                        case MOTIONDIRECT.RIGHT_DOWN: char.motionDirect = MOTIONDIRECT.RIGHT_UP; break;
+                    }
+                }
                 break;
         }
 
-        if (sendCommand("char_Move:\"" + name + '\",' + convertToText(n) + "\r\n") == "OK") { }
+        let idx = charactors.indexOf(char);
+        if (sendCommand("char_Move:" + convertToText(idx) + ',' + convertToText(n) + "\r\n") == "OK") { }
     }
 
 	/**
-	 * 角色转弯。
-     * @param name the new charactor's name, eg: "name"
+	 * 设置角色图形方向。
 	*/
-    //% blockId=iWall_characterTrun block="Character%name|Turn%turn"
-    //% weight=206
+    //% blockId=iWall_characterSetGraphDirect block="%char|Set Graph Direct%dir"
+    //% weight=218
     //% group="角色"
     //% inlineInputMode=inline
-    export function iWall_characterTrun(name: string, turn: TURN): void {
-        let char = getCharactorEntity(name);
-        
-        if (turn == TURN.LEFT) {
-            switch (char.direct) {
-                case DIRECT.UP: char.direct = DIRECT.LEFT; break;
-                case DIRECT.DOWN: char.direct = DIRECT.RIGHT; break;
-                case DIRECT.LEFT: char.direct = DIRECT.DOWN; break;
-                case DIRECT.RIGHT: char.direct = DIRECT.UP; break;
-            }
-        } else {
-            switch (char.direct) {
-                case DIRECT.UP: char.direct = DIRECT.RIGHT; break;
-                case DIRECT.DOWN: char.direct = DIRECT.LEFT; break;
-                case DIRECT.LEFT: char.direct = DIRECT.UP; break;
-                case DIRECT.RIGHT: char.direct = DIRECT.DOWN; break;
-            }
-        }
-
-        if (sendCommand("char_SetDir:\"" + name + '\",' + convertToText(char.direct) + "\r\n") == "OK") { }
+    //% dir.fieldEditor="gridpicker"
+    export function iWall_characterSetGraphDirect(char: Character, dir: GRAPHDIRECT): void {
+        char.graphDirect = dir;
+        let idx = charactors.indexOf(char);
+        if (sendCommand("char_SetGDir:" + convertToText(idx) + ',' + convertToText(dir) + "\r\n") == "OK") { }
     }
 
 	/**
-	 * 角色设置方向。
-     * @param name the new charactor's name, eg: "name"
+	 * 设置角色运动方向。
 	*/
-    //% blockId=iWall_characterSetDirect block="Character%name|Set%dir"
-    //% weight=205
+    //% blockId=iWall_characterSetMotionDirect block="%char|Set Motion Direct%dir"
+    //% weight=217
     //% group="角色"
     //% inlineInputMode=inline
-    export function iWall_characterSetDirect(name: string, dir: DIRECT): void {
-        let char = getCharactorEntity(name);
-        char.direct = dir;
-
-        if (sendCommand("char_SetDir:\"" + name + '\",' + convertToText(char.direct) + "\r\n") == "OK") { }
-    }
-
-	/**
-	 * 角色设置碰到边界处理方法。
-     * @param name the new charactor's name, eg: "name"
-	*/
-    //% blockId=iWall_characterSetEdgeMode block="Character%name|Edge Mode%mode"
-    //% weight=204
-    //% group="角色"
-    //% inlineInputMode=inline
-    export function iWall_characterSetEdgeMode(name: string, mode: EDGE_MODE): void {
-        let char = getCharactorEntity(name);
-        char.edgeMode = mode;
-
-        if (sendCommand("char_EdgeMode:\"" + name + '\",' + convertToText(char.edgeMode) + "\r\n") == "OK") { }
+    //% dir.fieldEditor="gridpicker" dir.fieldOptions.columns=2
+    export function iWall_characterSetMotionDirect(char: Character, dir: MOTIONDIRECT): void {
+        char.motionDirect = dir;
+        let idx = charactors.indexOf(char);
+        if (sendCommand("char_SetMDir:" + convertToText(idx) + ',' + convertToText(dir) + "\r\n") == "OK") { }
     }
 
 	/**
 	 * 角色设置位置。
-     * @param name the new charactor's name, eg: "name"
 	*/
-    //% blockId=iWall_characterSetXY block="Character%name|X%x|Y%y"
-    //% weight=203
+    //% blockId=iWall_characterSetXY block="%char|Move to X%x|Y%y"
+    //% weight=216
     //% group="角色"
     //% inlineInputMode=inline
-    export function iWall_characterSetXY(name: string, x: number, y: number): void {
-        let char = getCharactorEntity(name);
+    export function iWall_characterSetXY(char: Character, x: number, y: number): void {
         char.x = x;
         char.y = y;
 
+        let idx = charactors.indexOf(char);
         if (sendCommand(
-            "char_SetXY:\"" + name + '\",' +
+            "char_SetXY:" +
+            convertToText(idx) + ',' +
+            convertToText(char.x) + ',' +
+            convertToText(char.y) + "\r\n") == "OK") { }
+    }
+
+	/**
+	 * 角色设置单坐标位置。
+	*/
+    //% blockId=iWall_characterSetAxis block="%char|Set%axis%n"
+    //% weight=215
+    //% group="角色"
+    //% inlineInputMode=inline
+    //% axis.fieldEditor="gridpicker"
+     export function iWall_characterSetAxis(char: Character, axis: AXIS, n: number): void {
+        if (axis == AXIS.X) char.x = n;
+        else char.y = n;
+            
+        let idx = charactors.indexOf(char);
+        if (sendCommand(
+            "char_SetXY:" +
+            convertToText(idx) + ',' +
             convertToText(char.x) + ',' +
             convertToText(char.y) + "\r\n") == "OK") { }
     }
 
 	/**
 	 * 角色设置位置偏移。
-     * @param name the new charactor's name, eg: "name"
 	*/
-    //% blockId=iWall_characterSetXYOffset block="Character%name|Offset X%x|Y%y"
-    //% weight=202
+    //% blockId=iWall_characterSetXYOffset block="%char|Offset X%x|Y%y"
+    //% weight=214
     //% group="角色"
     //% inlineInputMode=inline
-    export function iWall_characterSetXYOffset(name: string, x: number, y: number): void {
-        let char = getCharactorEntity(name);
+    export function iWall_characterSetXYOffset(char: Character, x: number, y: number): void {
         char.x += x;
         char.y += y;
 
+        let idx = charactors.indexOf(char);
         if (sendCommand(
-            "char_SetXY:\"" + name + '\",' +
+            "char_SetXY:" +
+            convertToText(idx) + ',' +
+            convertToText(char.x) + ',' +
+            convertToText(char.y) + "\r\n") == "OK") { }
+    }
+
+	/**
+	 * 角色设置位置偏移。
+	*/
+    //% blockId=iWall_characterSetAxisOffset block="%char|Set%axis|Offset%n"
+    //% weight=213
+    //% group="角色"
+    //% inlineInputMode=inline
+    //% axis.fieldEditor="gridpicker"
+    export function iWall_characterSetAxisOffset(char: Character, axis: AXIS, n: number): void {
+        if (axis == AXIS.X) char.x += n;
+        else char.y += n;
+
+        let idx = charactors.indexOf(char);
+        if (sendCommand(
+            "char_SetXY:" +
+            convertToText(idx) + ',' +
             convertToText(char.x) + ',' +
             convertToText(char.y) + "\r\n") == "OK") { }
     }
 
 	/**
 	 * 获得角色坐标。
-     * @param name the new charactor's name, eg: "name"
 	*/
-    //% blockId=iWall_characterGetXY block="Character%name|Get%asix"
-    //% weight=201
+    //% blockId=iWall_characterGetXY block="Get%char|%asix"
+    //% weight=212
     //% group="角色"
     //% inlineInputMode=inline
-    export function iWall_characterGetXY(name: string, axis: AXIS): number {
-        let char = getCharactorEntity(name);
+    //% axis.fieldEditor="gridpicker"
+    export function iWall_characterGetXY(char: Character, axis: AXIS): number {
         return axis == AXIS.X ? char.x : char.y;
     }
 
 	/**
-	 * 获得角色方向。
-     * @param name the new charactor's name, eg: "name"
+	 * 获得角色图形方向。
 	*/
-    //% blockId=iWall_characterGetDirect block="Character%name|Get Direct"
-    //% weight=201
+    //% blockId=iWall_characterGetGraphDirect block="Get%char|Graph Direct"
+    //% weight=211
     //% group="角色"
     //% inlineInputMode=inline
-    export function iWall_characterGetDirect(name: string): DIRECT {
-        let char = getCharactorEntity(name);
-        return char.direct;
+    export function iWall_characterGetGraphDirect(char: Character): GRAPHDIRECT {
+        return char.graphDirect;
     }
 
 	/**
-	 * 方向。
+	 * 图形方向。
 	*/
-    //% blockId=iWall_direct block="%dir"
-    //% weight=201
+    //% blockId=iWall_GraphDirect block="%dir"
+    //% weight=210
     //% group="角色"
     //% inlineInputMode=inline
-    export function iWall_direct(dir: DIRECT): DIRECT {
+    export function iWall_GraphDirect(dir: GRAPHDIRECT): GRAPHDIRECT {
+        return dir;
+    }
+
+	/**
+	 * 获得角色运动方向。
+	*/
+    //% blockId=iWall_characterGetMotionDirect block="Get%char|Motion Direct"
+    //% weight=209
+    //% group="角色"
+    //% inlineInputMode=inline
+    export function iWall_characterGetMotionDirect(char: Character): MOTIONDIRECT {
+        return char.motionDirect;
+    }
+
+	/**
+	 * 运动方向。
+	*/
+    //% blockId=iWall_MotionDirect block="%dir"
+    //% weight=208
+    //% group="角色"
+    //% inlineInputMode=inline
+    export function iWall_MotionDirect(dir: MOTIONDIRECT): MOTIONDIRECT {
         return dir;
     }
 
 	/**
 	 * 角色设置可见。
-     * @param name the new charactor's name, eg: "name"
 	*/
-    //% blockId=iWall_characterSetVisible block="Character%name|Visibility %state"
-    //% weight=200
+    //% blockId=iWall_characterSetVisible block="%char|%state"
+    //% weight=207
     //% group="角色"
     //% inlineInputMode=inline
-    export function iWall_characterSetVisible(name: string, state: VISIBILITY): void {
-        let char = getCharactorEntity(name);
-        char.visible = state;
+    //% state.fieldEditor="gridpicker"
+    export function iWall_characterSetVisible(char: Character, state: VISIBILITY): void {
+        let idx = charactors.indexOf(char);
+        if (sendCommand(
+            "char_Visible:" + convertToText(idx) + ',' + convertToText(state) + "\r\n") == "OK") { }
+    }
+
+	/**
+	 * 角色设置图层。
+	*/
+    //% blockId=iWall_characterSetLayer block="%char|Set Layer to %layer"
+    //% weight=206
+    //% group="角色"
+    //% inlineInputMode=inline
+    //% state.fieldEditor="gridpicker"
+    export function iWall_characterSetLayer(char: Character, layer: LAYER_MODE): void {
+        let idx = charactors.indexOf(char);
+        let new_idx = 0;
+        switch (layer) {
+            case LAYER_MODE.TOP: if (idx > 0) new_idx = 0; break;
+            case LAYER_MODE.PREVIOUS: if (idx > 0) new_idx = idx - 1; break;
+            case LAYER_MODE.LATTER: if (idx < charactors.length - 1)  new_idx = idx + 1; break;
+            case LAYER_MODE.BOTTOM: if (idx < charactors.length - 1)  new_idx = charactors.length - 1; break;
+        }
+        charactors.splice(idx, 1);
+        charactors.insertAt(new_idx, char);
 
         if (sendCommand(
-            "char_Visible:\"" + name + '\",' + convertToText(state) + "\r\n") == "OK") { }
+            "char_Index:" + convertToText(idx) + ',' + convertToText(new_idx) + "\r\n") == "OK") { }
     }
+
+	/**
+	 * 角色设置碰到边界处理方法。
+	*/
+    //% blockId=iWall_characterSetEdgeMode block="%char|Edge Mode%mode"
+    //% weight=205
+    //% group="角色"
+    //% inlineInputMode=inline
+    export function iWall_characterSetEdgeMode(char: Character, mode: EDGE_MODE): void {
+        char.edgeMode = mode;
+
+        let idx = charactors.indexOf(char);
+        if (sendCommand("char_EdgeMode:" + convertToText(idx) + ',' + convertToText(mode) + "\r\n") == "OK") { }
+    }
+
+	/**
+	 * 角色反转。
+	*/
+    //% blockId=iWall_characterFlip block="%char|Flip%mode"
+    //% weight=204
+    //% group="角色"
+    //% inlineInputMode=inline
+    export function iWall_characterFlip(char: Character, mode: FLIP): void {
+        let idx = charactors.indexOf(char);
+        if (sendCommand("char_Flip:" + convertToText(idx) + ',' + convertToText(mode) + "\r\n") == "OK") { }
+    }
+
+	/**
+	 * 角色设置碰撞反转方式。
+	*/
+    //% blockId=iWall_characterSetFlipMode block="%char|Set Flip Mode%mode"
+    //% weight=203
+    //% group="角色"
+    //% inlineInputMode=inline
+    export function iWall_characterSetFlipMode(char: Character, mode: FLIP_MODE): void {
+        let idx = charactors.indexOf(char);
+        if (sendCommand("char_FlipMode:" + convertToText(idx) + ',' + convertToText(mode) + "\r\n") == "OK") { }
+    }
+
+	/**
+	 * 角色与角色间的距离。
+	*/
+    //% blockId=iWall_characterGetCharsDistance block="Get %char1|to%char2|Distance"
+    //% weight=202
+    //% group="角色"
+    //% inlineInputMode=inline
+    export function iWall_characterGetCharsDistance(char1: Character, char2: Character): number {
+        let dx = char1.x - char2.x;
+        let dy = char1.y - char2.y;
+        return Math.round(Math.sqrt(dx * dx + dy * dy));
+    }
+
+	/**
+	 * 角色与边界间的距离。
+	*/
+    //% blockId=iWall_characterGetCharToEdgeDistance block="Get %char|to%edge|Edge Distance"
+    //% weight=201
+    //% group="角色"
+    //% inlineInputMode=inline
+    //% edge.fieldEditor="gridpicker"
+    export function iWall_characterGetCharToEdgeDistance(char: Character, edge: DIRECT): number {
+        switch (edge) {
+            case DIRECT.UP:
+                return char.y + 1;
+            case DIRECT.DOWN:
+                return MATRIX_HEIGHT - char.y;
+            case DIRECT.LEFT:
+                return char.x + 1;
+            case DIRECT.RIGHT:
+                return MATRIX_WIDTH - char.x;
+        }
+    }
+
+
+
 
     /**
 	 * iWall的传感器单元初始化，需要放在“当开机时”中。

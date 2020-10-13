@@ -1,8 +1,4 @@
-namespace charactorType {
-    export const CHARACTOR_NUMBER = 0;
-    export const CHARACTOR_WIDTH = 1;
-    export const CHARACTOR_HEIGHT = 2;
-
+namespace characterType {
     export enum NAME {
         //% blockId="TEST0" block="Test0"
         TEST0 = 0,
@@ -15,14 +11,5 @@ namespace charactorType {
         //% blockId="TEST4" block="Test4"
         TEST4 = 4
     }
-
-
-    export const PARAM: number[][] =
-        [
-            [0, 5, 5],
-            [1, 5, 5],
-            [2, 5, 5],
-            [3, 5, 5],
-        ];
 
 }

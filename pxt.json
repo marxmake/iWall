@@ -13,7 +13,8 @@
         "charactorType.ts",
         "iWall.ts",
         "main.ts",
-        "_locales/zh-cn/iWall-strings.json"
+        "_locales/zh-cn/iWall-strings.json",
+        "main.py"
     ],
     "testFiles": [
         "test.ts"
