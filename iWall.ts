@@ -269,6 +269,7 @@ namespace iWall {
     //% weight=221
     //% group="角色"
     //% inlineInputMode=inline
+    //% type.fieldEditor="gridpicker" type.fieldOptions.columns=5
     export function iWall_createCharacter(
         type: characterType.NAME,
         x: number,
@@ -379,6 +380,20 @@ namespace iWall {
 
         let idx = charactors.indexOf(char);
         if (sendCommand("char_Move:" + convertToText(idx) + ',' + convertToText(n) + "\r\n") == "OK") { }
+    }
+
+	/**
+	 * 设置角色图形。
+	*/
+    //% blockId=iWall_characterSetGraph block="%char|Set Graph %type"
+    //% weight=219
+    //% group="角色"
+    //% inlineInputMode=inline
+    //% type.fieldEditor="gridpicker" type.fieldOptions.columns=5
+    export function iWall_characterSetGraph(char: Character, type: characterType.NAME): void {
+        char.type = type;
+        let idx = charactors.indexOf(char);
+        if (sendCommand("char_SetGraph:" + convertToText(idx) + ',' + convertToText(type) + "\r\n") == "OK") { }
     }
 
 	/**

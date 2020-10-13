@@ -11,6 +11,7 @@ iWall.iWall_Init()
 let t1 = iWall.iWall_CreateTimer()
 t2 = iWall.iWall_CreateTimer()
 c1 = iWall.iWall_createCharacter(characterType.NAME.TEST0, 0, 0)
+iWall.iWall_characterSetGraph(null, characterType.NAME.TEST0)
 basic.forever(function () {
     serial.writeLine("Timer1:" + iWall.iWall_GetTimerValue(t1))
     serial.writeLine("Timer2:" + iWall.iWall_GetTimerValue(t2))

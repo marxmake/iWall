@@ -7,6 +7,7 @@
     "iWall.iWall_createCharacter|block": "创建角色 类型%type|X%x|Y%y",
     "iWall.iWall_deleteCharacter|block": "删除角色%char",
     "iWall.iWall_characterMove|block": "%char|移动%n",
+    "iWall.iWall_characterSetGraph|block": "%char|设置类型%type",
     "iWall.iWall_characterSetGraphDirect|block": "%char|设置%dir",
     "iWall.iWall_characterSetMotionDirect|block": "%char|设置%dir",
     "iWall.iWall_characterSetXY|block": "%char|移动到 X%x|Y%y",
