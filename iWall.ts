@@ -105,7 +105,7 @@ namespace iWall {
         );
         basic.pause(100)
         serial.readString();
-        if (sendCommand("iWall_Init\r\n") == "OK") {}
+        if (sendCommand("D_Init\r\n") == "OK") {}
     }
 
     export class Timer {
@@ -122,7 +122,7 @@ namespace iWall {
     //% blockId=iWall_createTimer block="New Timer"
     //% weight=249
     //% group=""
-    export function iWall_CreateTimer(): Timer {
+    export function iWall_createTimer(): Timer {
         let timer = new Timer();
         return timer;
     }
@@ -245,15 +245,19 @@ namespace iWall {
     }
 
     export class Character {
-        type: characterType.NAME;
+        number: number;
         x: number;
         y: number;
+        width: number;
+        height: number;
         graphDirect: GRAPHDIRECT = GRAPHDIRECT.UP;
         motionDirect: MOTIONDIRECT = MOTIONDIRECT.UP;
         edgeMode: EDGE_MODE = EDGE_MODE.OVER;
 
         constructor(type: characterType.NAME, x: number, y: number) {
-            this.type = type;
+            this.number = characterType.graph_info[type][characterType.NUMBER];
+            this.width = characterType.graph_info[type][characterType.WIDTH];
+            this.height = characterType.graph_info[type][characterType.HEIGHT];
             this.x = x;
             this.y = y;
         }
@@ -266,7 +270,7 @@ namespace iWall {
 	 * 创建一个新角色。
 	*/
     //% blockId=iWall_createCharacter block="New Character Type%type|X%x|Y%y"
-    //% weight=221
+    //% weight=223
     //% group="角色"
     //% inlineInputMode=inline
     //% type.fieldEditor="gridpicker" type.fieldOptions.columns=5
@@ -279,8 +283,8 @@ namespace iWall {
         charactors.push(char);
         
         if (sendCommand(
-            "char_New:" +
-            convertToText(type) + ',' +
+            "C_New:" +
+            convertToText(char.number) + ',' +
             convertToText(x) + ',' +
             convertToText(y) + "\r\n") == "OK") { }
         
@@ -291,7 +295,7 @@ namespace iWall {
 	 * 删除一个新角色。
 	*/
     //% blockId=iWall_deleteCharacter block="Delete Character%char"
-    //% weight=220
+    //% weight=222
     //% group="角色"
     //% inlineInputMode=inline
     export function iWall_deleteCharacter(char: Character): void {
@@ -299,7 +303,7 @@ namespace iWall {
         charactors.splice(idx, 1);
 
         if (sendCommand(
-            "char_Delete:" +
+            "C_Del:" +
             convertToText(idx) + "\r\n") == "OK") { } 
     }
 
@@ -308,7 +312,7 @@ namespace iWall {
      * @param n the number of step to move, eg: 1, -1
 	*/
     //% blockId=iWall_characterMove block="Character%char|Move%n"
-    //% weight=219
+    //% weight=221
     //% group="角色"
     //% inlineInputMode=inline
     export function iWall_characterMove(char: Character, n: number): void {
@@ -329,16 +333,16 @@ namespace iWall {
             case EDGE_MODE.OVER:
                 break;
             case EDGE_MODE.HALT:
-                let excessX = 0, excessY = 0;
-                if (char.x < X_MIN) excessX -= char.x;
-                if (char.x > X_MAX) excessX = X_MAX - char.x;
-                if (char.y < Y_MIN) excessY -= char.y;
-                if (char.y > Y_MAX) excessY = Y_MAX - char.y;
-                if (excessX != 0 || excessY != 0) {
-                    if (Math.abs(excessX) > Math.abs(excessY)) {
-                        char.x += excessX; char.y += excessX;
+                let dx = 0, dy = 0;
+                if (char.x < X_MIN) dx -= char.x;
+                if (char.x > X_MAX) dx = X_MAX - char.x;
+                if (char.y < Y_MIN) dy -= char.y;
+                if (char.y > Y_MAX) dy = Y_MAX - char.y;
+                if (dx != 0 || dy != 0) {
+                    if (Math.abs(dx) > Math.abs(dy)) {
+                        char.x += dx; char.y += dx;
                     } else {
-                        char.x += excessY; char.y += excessY;
+                        char.x += dy; char.y += dy;
                     }
                 }
                 break;
@@ -379,56 +383,58 @@ namespace iWall {
         }
 
         let idx = charactors.indexOf(char);
-        if (sendCommand("char_Move:" + convertToText(idx) + ',' + convertToText(n) + "\r\n") == "OK") { }
+        if (sendCommand("C_Mov:" + convertToText(idx) + ',' + convertToText(n) + "\r\n") == "OK") { }
     }
 
 	/**
 	 * 设置角色图形。
 	*/
     //% blockId=iWall_characterSetGraph block="%char|Set Graph %type"
-    //% weight=219
+    //% weight=220
     //% group="角色"
     //% inlineInputMode=inline
     //% type.fieldEditor="gridpicker" type.fieldOptions.columns=5
     export function iWall_characterSetGraph(char: Character, type: characterType.NAME): void {
-        char.type = type;
+        char.number = characterType.graph_info[type][characterType.NUMBER];
+        char.width = characterType.graph_info[type][characterType.WIDTH];
+        char.height = characterType.graph_info[type][characterType.HEIGHT];
         let idx = charactors.indexOf(char);
-        if (sendCommand("char_SetGraph:" + convertToText(idx) + ',' + convertToText(type) + "\r\n") == "OK") { }
+        if (sendCommand("C_SetG:" + convertToText(idx) + ',' + convertToText(char.number) + "\r\n") == "OK") { }
     }
 
 	/**
 	 * 设置角色图形方向。
 	*/
     //% blockId=iWall_characterSetGraphDirect block="%char|Set Graph Direct%dir"
-    //% weight=218
+    //% weight=219
     //% group="角色"
     //% inlineInputMode=inline
     //% dir.fieldEditor="gridpicker"
     export function iWall_characterSetGraphDirect(char: Character, dir: GRAPHDIRECT): void {
         char.graphDirect = dir;
         let idx = charactors.indexOf(char);
-        if (sendCommand("char_SetGDir:" + convertToText(idx) + ',' + convertToText(dir) + "\r\n") == "OK") { }
+        if (sendCommand("C_SetGD:" + convertToText(idx) + ',' + convertToText(dir) + "\r\n") == "OK") { }
     }
 
 	/**
 	 * 设置角色运动方向。
 	*/
     //% blockId=iWall_characterSetMotionDirect block="%char|Set Motion Direct%dir"
-    //% weight=217
+    //% weight=218
     //% group="角色"
     //% inlineInputMode=inline
     //% dir.fieldEditor="gridpicker" dir.fieldOptions.columns=2
     export function iWall_characterSetMotionDirect(char: Character, dir: MOTIONDIRECT): void {
         char.motionDirect = dir;
         let idx = charactors.indexOf(char);
-        if (sendCommand("char_SetMDir:" + convertToText(idx) + ',' + convertToText(dir) + "\r\n") == "OK") { }
+        if (sendCommand("C_SetMD:" + convertToText(idx) + ',' + convertToText(dir) + "\r\n") == "OK") { }
     }
 
 	/**
 	 * 角色设置位置。
 	*/
     //% blockId=iWall_characterSetXY block="%char|Move to X%x|Y%y"
-    //% weight=216
+    //% weight=217
     //% group="角色"
     //% inlineInputMode=inline
     export function iWall_characterSetXY(char: Character, x: number, y: number): void {
@@ -437,7 +443,7 @@ namespace iWall {
 
         let idx = charactors.indexOf(char);
         if (sendCommand(
-            "char_SetXY:" +
+            "C_XY:" +
             convertToText(idx) + ',' +
             convertToText(char.x) + ',' +
             convertToText(char.y) + "\r\n") == "OK") { }
@@ -447,7 +453,7 @@ namespace iWall {
 	 * 角色设置单坐标位置。
 	*/
     //% blockId=iWall_characterSetAxis block="%char|Set%axis%n"
-    //% weight=215
+    //% weight=216
     //% group="角色"
     //% inlineInputMode=inline
     //% axis.fieldEditor="gridpicker"
@@ -457,7 +463,7 @@ namespace iWall {
             
         let idx = charactors.indexOf(char);
         if (sendCommand(
-            "char_SetXY:" +
+            "C_XY:" +
             convertToText(idx) + ',' +
             convertToText(char.x) + ',' +
             convertToText(char.y) + "\r\n") == "OK") { }
@@ -467,7 +473,7 @@ namespace iWall {
 	 * 角色设置位置偏移。
 	*/
     //% blockId=iWall_characterSetXYOffset block="%char|Offset X%x|Y%y"
-    //% weight=214
+    //% weight=215
     //% group="角色"
     //% inlineInputMode=inline
     export function iWall_characterSetXYOffset(char: Character, x: number, y: number): void {
@@ -476,7 +482,7 @@ namespace iWall {
 
         let idx = charactors.indexOf(char);
         if (sendCommand(
-            "char_SetXY:" +
+            "C_XY:" +
             convertToText(idx) + ',' +
             convertToText(char.x) + ',' +
             convertToText(char.y) + "\r\n") == "OK") { }
@@ -486,7 +492,7 @@ namespace iWall {
 	 * 角色设置位置偏移。
 	*/
     //% blockId=iWall_characterSetAxisOffset block="%char|Set%axis|Offset%n"
-    //% weight=213
+    //% weight=214
     //% group="角色"
     //% inlineInputMode=inline
     //% axis.fieldEditor="gridpicker"
@@ -496,7 +502,7 @@ namespace iWall {
 
         let idx = charactors.indexOf(char);
         if (sendCommand(
-            "char_SetXY:" +
+            "C_XY:" +
             convertToText(idx) + ',' +
             convertToText(char.x) + ',' +
             convertToText(char.y) + "\r\n") == "OK") { }
@@ -506,7 +512,7 @@ namespace iWall {
 	 * 获得角色坐标。
 	*/
     //% blockId=iWall_characterGetXY block="Get%char|%asix"
-    //% weight=212
+    //% weight=213
     //% group="角色"
     //% inlineInputMode=inline
     //% axis.fieldEditor="gridpicker"
@@ -518,7 +524,7 @@ namespace iWall {
 	 * 获得角色图形方向。
 	*/
     //% blockId=iWall_characterGetGraphDirect block="Get%char|Graph Direct"
-    //% weight=211
+    //% weight=212
     //% group="角色"
     //% inlineInputMode=inline
     export function iWall_characterGetGraphDirect(char: Character): GRAPHDIRECT {
@@ -529,7 +535,7 @@ namespace iWall {
 	 * 图形方向。
 	*/
     //% blockId=iWall_GraphDirect block="%dir"
-    //% weight=210
+    //% weight=211
     //% group="角色"
     //% inlineInputMode=inline
     export function iWall_GraphDirect(dir: GRAPHDIRECT): GRAPHDIRECT {
@@ -540,7 +546,7 @@ namespace iWall {
 	 * 获得角色运动方向。
 	*/
     //% blockId=iWall_characterGetMotionDirect block="Get%char|Motion Direct"
-    //% weight=209
+    //% weight=210
     //% group="角色"
     //% inlineInputMode=inline
     export function iWall_characterGetMotionDirect(char: Character): MOTIONDIRECT {
@@ -551,7 +557,7 @@ namespace iWall {
 	 * 运动方向。
 	*/
     //% blockId=iWall_MotionDirect block="%dir"
-    //% weight=208
+    //% weight=209
     //% group="角色"
     //% inlineInputMode=inline
     export function iWall_MotionDirect(dir: MOTIONDIRECT): MOTIONDIRECT {
@@ -562,21 +568,21 @@ namespace iWall {
 	 * 角色设置可见。
 	*/
     //% blockId=iWall_characterSetVisible block="%char|%state"
-    //% weight=207
+    //% weight=208
     //% group="角色"
     //% inlineInputMode=inline
     //% state.fieldEditor="gridpicker"
     export function iWall_characterSetVisible(char: Character, state: VISIBILITY): void {
         let idx = charactors.indexOf(char);
         if (sendCommand(
-            "char_Visible:" + convertToText(idx) + ',' + convertToText(state) + "\r\n") == "OK") { }
+            "C_Vis:" + convertToText(idx) + ',' + convertToText(state) + "\r\n") == "OK") { }
     }
 
 	/**
 	 * 角色设置图层。
 	*/
     //% blockId=iWall_characterSetLayer block="%char|Set Layer to %layer"
-    //% weight=206
+    //% weight=207
     //% group="角色"
     //% inlineInputMode=inline
     //% state.fieldEditor="gridpicker"
@@ -593,45 +599,60 @@ namespace iWall {
         charactors.insertAt(new_idx, char);
 
         if (sendCommand(
-            "char_Index:" + convertToText(idx) + ',' + convertToText(new_idx) + "\r\n") == "OK") { }
+            "C_Idx:" + convertToText(idx) + ',' + convertToText(new_idx) + "\r\n") == "OK") { }
     }
 
 	/**
 	 * 角色设置碰到边界处理方法。
 	*/
     //% blockId=iWall_characterSetEdgeMode block="%char|Edge Mode%mode"
-    //% weight=205
+    //% weight=206
     //% group="角色"
     //% inlineInputMode=inline
     export function iWall_characterSetEdgeMode(char: Character, mode: EDGE_MODE): void {
         char.edgeMode = mode;
 
         let idx = charactors.indexOf(char);
-        if (sendCommand("char_EdgeMode:" + convertToText(idx) + ',' + convertToText(mode) + "\r\n") == "OK") { }
+        if (sendCommand("C_EdgeMode:" + convertToText(idx) + ',' + convertToText(mode) + "\r\n") == "OK") { }
     }
 
 	/**
 	 * 角色反转。
 	*/
     //% blockId=iWall_characterFlip block="%char|Flip%mode"
-    //% weight=204
+    //% weight=205
     //% group="角色"
     //% inlineInputMode=inline
     export function iWall_characterFlip(char: Character, mode: FLIP): void {
         let idx = charactors.indexOf(char);
-        if (sendCommand("char_Flip:" + convertToText(idx) + ',' + convertToText(mode) + "\r\n") == "OK") { }
+        if (sendCommand("C_Flp:" + convertToText(idx) + ',' + convertToText(mode) + "\r\n") == "OK") { }
     }
 
 	/**
 	 * 角色设置碰撞反转方式。
 	*/
     //% blockId=iWall_characterSetFlipMode block="%char|Set Flip Mode%mode"
-    //% weight=203
+    //% weight=204
     //% group="角色"
     //% inlineInputMode=inline
     export function iWall_characterSetFlipMode(char: Character, mode: FLIP_MODE): void {
         let idx = charactors.indexOf(char);
-        if (sendCommand("char_FlipMode:" + convertToText(idx) + ',' + convertToText(mode) + "\r\n") == "OK") { }
+        if (sendCommand("C_FlepMode:" + convertToText(idx) + ',' + convertToText(mode) + "\r\n") == "OK") { }
+    }
+
+	/**
+	 * 角色与角色是否碰撞。
+	*/
+    //% blockId=iWall_characterGetCharsCollision block="Get %char1|to%char2|Collision"
+    //% weight=203
+    //% group="角色"
+    //% inlineInputMode=inline
+    export function iWall_characterGetCharsCollision(char1: Character, char2: Character): boolean {
+        if ((Math.abs(char1.x - char2.x) * 2 < char1.width + char2.width) &&
+            (Math.abs(char1.y - char2.y) * 2 < char1.height + char2.height)) {
+            return true;
+        }
+        return false
     }
 
 	/**
@@ -680,7 +701,7 @@ namespace iWall {
     //% sensor.fieldEditor="gridpicker" sensor.fieldOptions.columns=3
     //% sensor.fieldOptions.tooltips="false"
     export function iWall_SensorInit(sensor: SENSOR): void {
-        if (sendCommand("sensor_Init:" + convertToText(sensor) + "\r\n") == "OK") { }
+        if (sendCommand("S_Init:" + convertToText(sensor) + "\r\n") == "OK") { }
     }
 
 	/**                              
@@ -695,7 +716,7 @@ namespace iWall {
         let idx = sensor;
         let data = 0;
         if (sensor == SENSOR_DATA.HUMI) idx = SENSOR_DATA.TEMP;
-        let tmp_str = sendCommand("sensor_Get:" + convertToText(idx) + "\r\n");
+        let tmp_str = sendCommand("S_Get:" + convertToText(idx) + "\r\n");
         if ((tmp_str.charAt(0) == 'O') && (tmp_str.charAt(1) == 'K')) {
             let len = 0;
             let tmp_char;
@@ -750,7 +771,7 @@ namespace iWall {
     //% weight=196
     //% group="绘图"
     export function iWall_LEDMatrixClear(): void {
-        if (sendCommand("ledMatrix_Clear\r\n") == "OK") { }
+        if (sendCommand("P_Clr\r\n") == "OK") { }
     }
 
     /** 
@@ -781,7 +802,7 @@ namespace iWall {
         let b = (rgb) & 0xFF;
 
         if (sendCommand(
-            "ledMatrix_Dot:" +
+            "P_Dot:" +
             convertToText(x) + ',' +
             convertToText(y) + ',' +
             convertToText(r) + ',' +
@@ -808,7 +829,7 @@ namespace iWall {
         let b = (rgb) & 0xFF;
 
         if (sendCommand(
-            "ledMatrix_Line:" +
+            "P_Lin:" +
             convertToText(x0) + ',' +
             convertToText(y0) + ',' +
             convertToText(x1) + ',' +
@@ -837,7 +858,7 @@ namespace iWall {
         let b = (rgb) & 0xFF;
 
         if (sendCommand(
-            "ledMatrix_Rect:" +
+            "P_Rct:" +
             convertToText(x0) + ',' +
             convertToText(y0) + ',' +
             convertToText(x1) + ',' +
@@ -859,7 +880,7 @@ namespace iWall {
     //% inlineInputMode=inline
     export function iWall_LEDMatrixShift(dir: DIRECT, num: number): void {
         if (sendCommand(
-            "ledMatrix_Shift:" +
+            "P_Shift:" +
             convertToText(dir) + ',' +
             convertToText(num) + ',' +
             "\r\n") == "OK") { }

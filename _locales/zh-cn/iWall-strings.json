@@ -1,8 +1,8 @@
 {
     "iWall.iWall_Init|block": "iWall 初始化",
     "iWall.iWall_createTimer|block": "新计时器",
-    "iWall.iWall_getTimerValue|block": "获取计时器%timer|的时间(毫秒)",
-    "iWall.iWall_clearTimer|block": "清零计时器%timer",
+    "iWall.iWall_GetTimerValue|block": "获取计时器%timer|的时间(毫秒)",
+    "iWall.iWall_ClearTimer|block": "清零计时器%timer",
 
     "iWall.iWall_createCharacter|block": "创建角色 类型%type|X%x|Y%y",
     "iWall.iWall_deleteCharacter|block": "删除角色%char",
@@ -22,6 +22,7 @@
     "iWall.iWall_characterSetEdgeMode|block": "%char|遇到边缘%mode",
     "iWall.iWall_characterFlip|block": "%char|%mode|翻转",
     "iWall.iWall_characterSetFlipMode|block": "%char|遇到边缘时%mode",
+    "iWall.iWall_characterGetCharsCollision|block": "%char1|与%char2|是否碰撞",
     "iWall.iWall_characterGetCharsDistance|block": "获取%char1|与%char2|的距离",
     "iWall.iWall_characterGetCharToEdgeDistance|block": "获取%char|与%edge|边界的距离",
     
