@@ -1,9 +1,11 @@
 {
     "iWall.iWall_Init|block": "iWall 初始化",
-    "iWall.iWall_GetTimeMillis|block": "获取计时器数值",
-    "iWall.iWall_ClearTimer|block": "清空计时器数值",
+    "iWall.iWall_createTimer|block": "新计时器",
+    "iWall.iWall_getTimerValue|block": "获取计时器%timer|的时间(毫秒)",
+    "iWall.iWall_clearTimer|block": "清零计时器%timer",
 
     "iWall.iWall_createCharacter|block": "创建角色 类型%type|X%x|Y%y",
+    "iWall.iWall_deleteCharacter|block": "删除角色%char",
     "iWall.iWall_characterMove|block": "%char|移动%n",
     "iWall.iWall_characterSetGraphDirect|block": "%char|设置%dir",
     "iWall.iWall_characterSetMotionDirect|block": "%char|设置%dir",

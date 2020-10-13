@@ -108,26 +108,43 @@ namespace iWall {
         if (sendCommand("iWall_Init\r\n") == "OK") {}
     }
 
-    let time_millis = control.millis();
+    export class Timer {
+        value: number;
+
+        constructor() {
+            this.value = control.millis();
+        }
+    }
 
 	/**
-	 * 获取计时器的数值。
+	 * 新建一个计时器。
 	*/
-    //% blockId=iWall_GetTimer block="Get Time(millis)"
+    //% blockId=iWall_createTimer block="New Timer"
     //% weight=249
     //% group=""
-    export function iWall_GetTimeMillis(): number {
-        return control.millis() - time_millis;
+    export function iWall_CreateTimer(): Timer {
+        let timer = new Timer();
+        return timer;
+    }
+
+	/**
+	 * 获取一个计时器的值。
+	*/
+    //% blockId=iWall_getTimerValue block="Get Timer%timer|(millis)"
+    //% weight=248
+    //% group=""
+    export function iWall_GetTimerValue(timer: Timer): number {
+        return control.millis() - timer.value;
     }
 
 	/**
 	 * 清零计时器的数值。
 	*/
-    //% blockId=iWall_ClearTimer block="Get Time(millis)"
-    //% weight=248
+    //% blockId=iWall_clearTimer block="Clear TimeR"
+    //% weight=247
     //% group=""
-    export function iWall_ClearTimer() {
-        time_millis = control.millis();
+    export function iWall_ClearTimer(timer: Timer) {
+        timer.value = control.millis();
     }
 
     export enum AXIS {
@@ -249,7 +266,7 @@ namespace iWall {
 	 * 创建一个新角色。
 	*/
     //% blockId=iWall_createCharacter block="New Character Type%type|X%x|Y%y"
-    //% weight=220
+    //% weight=221
     //% group="角色"
     //% inlineInputMode=inline
     export function iWall_createCharacter(
@@ -267,6 +284,22 @@ namespace iWall {
             convertToText(y) + "\r\n") == "OK") { }
         
         return char;
+    }
+
+	/**
+	 * 删除一个新角色。
+	*/
+    //% blockId=iWall_deleteCharacter block="Delete Character%char"
+    //% weight=220
+    //% group="角色"
+    //% inlineInputMode=inline
+    export function iWall_deleteCharacter(char: Character): void {
+        let idx = charactors.indexOf(char);
+        charactors.splice(idx, 1);
+
+        if (sendCommand(
+            "char_Delete:" +
+            convertToText(idx) + "\r\n") == "OK") { } 
     }
 
 	/**
