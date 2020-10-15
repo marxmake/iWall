@@ -108,5 +108,4 @@
     "iWall.EDGE_MODE.HALT|block": "停止",
     "iWall.EDGE_MODE.REBOUND|block": "反弹",
     "iWall.EDGE_MODE.INTERLINK|block": "另一侧飞出"
-
 }
