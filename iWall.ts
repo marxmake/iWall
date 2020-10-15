@@ -255,9 +255,9 @@ namespace iWall {
         edgeMode: EDGE_MODE = EDGE_MODE.OVER;
 
         constructor(type: characterType.NAME, x: number, y: number) {
-            this.number = characterType.graph_info[type][characterType.NUMBER];
-            this.width = characterType.graph_info[type][characterType.WIDTH];
-            this.height = characterType.graph_info[type][characterType.HEIGHT];
+            this.number = characterType.info[type][characterType.NUMBER];
+            this.width = characterType.info[type][characterType.WIDTH];
+            this.height = characterType.info[type][characterType.HEIGHT];
             this.x = x;
             this.y = y;
         }
@@ -300,11 +300,14 @@ namespace iWall {
     //% inlineInputMode=inline
     export function iWall_deleteCharacter(char: Character): void {
         let idx = charactors.indexOf(char);
-        charactors.splice(idx, 1);
 
-        if (sendCommand(
-            "C_Del:" +
-            convertToText(idx) + "\r\n") == "OK") { } 
+        if (idx != -1) {
+            charactors.splice(idx, 1);
+
+            if (sendCommand(
+                "C_Del:" +
+                convertToText(idx) + "\r\n") == "OK") { } 
+        }
     }
 
 	/**
@@ -317,7 +320,8 @@ namespace iWall {
     //% inlineInputMode=inline
     export function iWall_characterMove(char: Character, n: number): void {
         if (n == 0) return;
-
+        let old_x = char.x;
+        let old_y = char.y;
         switch (char.motionDirect) {
             case MOTIONDIRECT.UP: char.y -= n; break;
             case MOTIONDIRECT.DOWN: char.y += n; break;
@@ -340,9 +344,9 @@ namespace iWall {
                 if (char.y > Y_MAX) dy = Y_MAX - char.y;
                 if (dx != 0 || dy != 0) {
                     if (Math.abs(dx) > Math.abs(dy)) {
-                        char.x += dx; char.y += dx;
+                        char.x += dx; char.y += char.y > old_y ? - Math.abs(dx) : Math.abs(dx);
                     } else {
-                        char.x += dy; char.y += dy;
+                        char.x += char.x > old_x ? - Math.abs(dy) : Math.abs(dy); char.y += dy;
                     }
                 }
                 break;
@@ -395,9 +399,9 @@ namespace iWall {
     //% inlineInputMode=inline
     //% type.fieldEditor="gridpicker" type.fieldOptions.columns=5
     export function iWall_characterSetGraph(char: Character, type: characterType.NAME): void {
-        char.number = characterType.graph_info[type][characterType.NUMBER];
-        char.width = characterType.graph_info[type][characterType.WIDTH];
-        char.height = characterType.graph_info[type][characterType.HEIGHT];
+        char.number = characterType.info[type][characterType.NUMBER];
+        char.width = characterType.info[type][characterType.WIDTH];
+        char.height = characterType.info[type][characterType.HEIGHT];
         let idx = charactors.indexOf(char);
         if (sendCommand("C_SetG:" + convertToText(idx) + ',' + convertToText(char.number) + "\r\n") == "OK") { }
     }
@@ -691,12 +695,52 @@ namespace iWall {
 
 
 
+	/**
+	 * 设置背景。
+	*/
+    //% blockId=iWall_backSet block="Set Background %name"
+    //% weight=202
+    //% group="背景"
+    //% inlineInputMode=inline
+    //% edge.fieldEditor="gridpicker"
+    export function iWall_backSet(name: backgroundType.NAME): void {
+        if (sendCommand("B_Set:" + convertToText(name) + "\r\n") == "OK") { }
+    }
+
+	/**
+	 * 背景移动。
+     * @param n the number of step to move, eg: 1, -1
+	*/
+    //% blockId=iWall_backMove block="Background Move%n|Step to %dir"
+    //% weight=201
+    //% group="背景"
+    //% n.min=1 n.max=33
+    //% inlineInputMode=inline
+    //% edge.fieldEditor="gridpicker"
+    export function iWall_backMove(n: number, dir: MOTIONDIRECT): void {
+        if (sendCommand("B_Mov:" + convertToText(n) + ',' + convertToText(dir) + "\r\n") == "OK") { }
+    }
+
+	/**
+	 * 背景自动移动。
+     * @param ms the interval of move, eg: 300, 100
+	*/
+    //% blockId=iWall_backAutoMove block="Background Move 1 Step per%ms|ms to %dir"
+    //% weight=200
+    //% group="背景"
+    //% inlineInputMode=inline
+    //% edge.fieldEditor="gridpicker"
+    export function iWall_backAutoMove(ms: number, dir: MOTIONDIRECT): void {
+        if (sendCommand("B_AutoMove:" + convertToText(ms) + ',' + convertToText(dir) + "\r\n") == "OK") { }
+    }
+
+
 
     /**
 	 * iWall的传感器单元初始化，需要放在“当开机时”中。
 	*/
     //% blockId=iWall_SensorInit block="iWall Sensor Init |%sensor|"
-    //% weight=199
+    //% weight=131
     //% group="传感器"
     //% sensor.fieldEditor="gridpicker" sensor.fieldOptions.columns=3
     //% sensor.fieldOptions.tooltips="false"
@@ -708,7 +752,7 @@ namespace iWall {
 	 * iWall的传感器数据获取。
 	*/
     //% blockId=iWall_SensorGet block="iWall Sensor Get |%sensor|"
-    //% weight=198
+    //% weight=130
     //% group="传感器"
     //% sensor.fieldEditor="gridpicker" sensor.fieldOptions.columns=3
     //% sensor.fieldOptions.tooltips="false"
@@ -752,7 +796,7 @@ namespace iWall {
 	//  * iWall点阵屏显示，使用绘画功能之后（如画直线），需要使用该函数来更新显示内容。
 	// */
     // //% blockId=iWall_LEDMatrixShow block="iWall LED Matrix Show"
-    // //% weight=197
+    // //% weight=106
     // //% group="绘图"
     // export function iWall_LEDMatrixShow(): void {
     //     let tmp_str = "ledMatrix_Show\r\n";
@@ -768,7 +812,7 @@ namespace iWall {
 	 * iWall点阵屏清空画布，需要清除屏，请再使用点阵显示函数。
 	*/
     //% blockId=iWall_LEDMatrixClear block="iWall LED Matrix Clear Canvas"
-    //% weight=196
+    //% weight=105
     //% group="绘图"
     export function iWall_LEDMatrixClear(): void {
         if (sendCommand("P_Clr\r\n") == "OK") { }
@@ -777,7 +821,7 @@ namespace iWall {
     /** 
      * 设置 红、绿、蓝 三个颜色的分量
      */
-    //% weight=195
+    //% weight=104
     //% r.min=0 r.max=255
     //% g.min=0 g.max=255
     //% b.min=0 b.max=255
@@ -790,7 +834,7 @@ namespace iWall {
     /**
      * iWall点阵屏绘制像素点
      */
-    //% weight=194
+    //% weight=103
     //% x.min=0 x.max=33
     //% y.min=0 y.max=29
     //% rgb.shadow="colorNumberPicker"
@@ -814,7 +858,7 @@ namespace iWall {
     /**
      * iWall点阵屏绘制直线
      */
-    //% weight=193
+    //% weight=102
     //% x0.min=0 x0.max=33
     //% y0.min=0 y0.max=29
     //% x1.min=0 x1.max=33
@@ -843,7 +887,7 @@ namespace iWall {
     /**
      * iWall点阵屏绘制矩形
      */
-    //% weight=192
+    //% weight=101
     //% x0.min=0 x0.max=33
     //% y0.min=0 y0.max=29
     //% x1.min=0 x1.max=33
@@ -874,7 +918,7 @@ namespace iWall {
      * iWall点阵屏绘制矩形
 	 * @param num [1-34] ; eg: 1, 25
      */
-    //% weight=191
+    //% weight=100
     //% blockId=iWall_LEDMatrixShift block="iWall Shift Direct|%dir| Number|%num|"
     //% group="绘图"
     //% inlineInputMode=inline

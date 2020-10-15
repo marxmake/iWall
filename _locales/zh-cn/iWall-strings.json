@@ -25,6 +25,10 @@
     "iWall.iWall_characterGetCharsCollision|block": "%char1|与%char2|是否碰撞",
     "iWall.iWall_characterGetCharsDistance|block": "获取%char1|与%char2|的距离",
     "iWall.iWall_characterGetCharToEdgeDistance|block": "获取%char|与%edge|边界的距离",
+
+    "iWall.iWall_backSet|block": "设置背景为%name",
+    "iWall.iWall_backMove|block": "背景移动%n|向%dir",
+    "iWall.iWall_backAutoMove|block": "背景每%ms|(毫秒)向%dir|移动一格",
     
     "iWall.iWall_SensorInit|block": "传感器初始化 |%sensor|",
     "iWall.iWall_SensorGet|block": "传感器数值获取 |%sensor|",

@@ -10,7 +10,7 @@
     "files": [
         "README.md",
         "main.blocks",
-        "charactorType.ts",
+        "materialType.ts",
         "iWall.ts",
         "main.ts",
         "_locales/zh-cn/iWall-strings.json",
