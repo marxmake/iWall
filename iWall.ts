@@ -637,7 +637,7 @@ namespace iWall {
     //% inlineInputMode=inline
     export function iWall_characterSetFlipMode(char: Character, mode: FLIP_MODE): void {
         let idx = charactors.indexOf(char);
-        if (sendCommand("C_FlepMode:" + convertToText(idx) + ',' + convertToText(mode) + "\r\n") == "OK") { }
+        if (sendCommand("C_FlipMode:" + convertToText(idx) + ',' + convertToText(mode) + "\r\n") == "OK") { }
     }
 
 	/**
