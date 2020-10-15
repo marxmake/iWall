@@ -704,7 +704,7 @@ namespace iWall {
     //% inlineInputMode=inline
     //% edge.fieldEditor="gridpicker"
     export function iWall_backSet(name: backgroundType.NAME): void {
-        if (sendCommand("B_Set:" + convertToText(name) + "\r\n") == "OK") { }
+        if (sendCommand("B_Set:" + convertToText(backgroundType.info[name][backgroundType.NUMBER]) + "\r\n") == "OK") { }
     }
 
 	/**
@@ -928,6 +928,63 @@ namespace iWall {
             convertToText(dir) + ',' +
             convertToText(num) + ',' +
             "\r\n") == "OK") { }
-        }
+    }
+
+
+
+    /**
+     * 播放背景音乐
+     */
+    //% weight=74
+    //% blockId=iWall_musicBackPlay block="Play Back Music%name"
+    //% group="音乐"
+    //% inlineInputMode=inline
+    export function iWall_musicBackPlay(name: backMusicType.NAME): void {
+        if (sendCommand("M_Play:" + convertToText(backMusicType.info[name][backMusicType.NUMBER]) + "\r\n") == "OK") { }
+    }
+
+    /**
+     * 暂停背景音乐
+     */
+    //% weight=73
+    //% blockId=iWall_musicBackPause block="Pause Back Music"
+    //% group="音乐"
+    //% inlineInputMode=inline
+    export function iWall_musicBackPause(): void {
+        if (sendCommand("M_Pause" + "\r\n") == "OK") { }
+    }
+
+    /**
+     * 停止背景音乐
+     */
+    //% weight=72
+    //% blockId=iWall_musicBackStop block="Stop Back Music"
+    //% group="音乐"
+    //% inlineInputMode=inline
+    export function iWall_musicBackStop(): void {
+        if (sendCommand("M_Stop" + "\r\n") == "OK") { }
+    }
+
+    /**
+     * 继续背景音乐
+     */
+    //% weight=71
+    //% blockId=iWall_musicBackResume block="Resume Back Music"
+    //% group="音乐"
+    //% inlineInputMode=inline
+    export function iWall_musicBackResume(): void {
+        if (sendCommand("M_Resume" + "\r\n") == "OK") { }
+    }
+
+    /**
+     * 播放音效
+     */
+    //% weight=70
+    //% blockId=iWall_musicSoundPlay block="Play Sound%name"
+    //% group="音乐"
+    //% inlineInputMode=inline
+    export function iWall_musicSoundPlay(name: soundType.NAME): void {
+        if (sendCommand("M_SPlay:" + convertToText(soundType.info[name][soundType.NUMBER]) + "\r\n") == "OK") { }
+    }
 }
 
