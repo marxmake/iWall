@@ -48,18 +48,16 @@ namespace characterType {
         ROCKET_BODY_2 = 20,
         //% blockId="ROCKET_BODY_3" block="Rocket_Body_3(9x6)"
         ROCKET_BODY_3 = 21,
-        //% blockId="ROCKET_FLAME_1" block="Rocket_Flame_1(5x4)"
+        //% blockId="ROCKET_FLAME" block="Rocket_Flame(5x6)"
         ROCKET_FLAME_1 = 22,
-        //% blockId="ROCKET_FLAME_2" block="Rocket_Flame_2(5x6)"
-        ROCKET_FLAME_2 = 23,
         //% blockId="SEPARATE_BUTTON" block="Separate_Button(7x7)"
-        SEPARATE_BUTTON = 24,
-        //% blockId="SEPARATE_BUTTON_PRESSED" block="Separate_Button_Pressed(7x7)"
-        SEPARATE_BUTTON_PRESSED = 25,
+        SEPARATE_BUTTON = 23,
         //% blockId="SEPARATE_AREA" block="Separate_Area(1x5)"
-        SEPARATE_AREA = 26,
+        SEPARATE_AREA = 24,
         //% blockId="GAME_WIN" block="Game_Win(18x8)"
-        GAME_WIN = 27
+        GAME_WIN = 25,
+        //% blockId="TRY_AGAIN" block="Try_Again(29x15)"
+        TRY_AGAIN = 26
     }
 
     export const info = [
@@ -85,12 +83,10 @@ namespace characterType {
         [501, 5, 4],
         [502, 5, 6],
         [900, 9, 6],
-        [503, 5, 4],
-        [504, 5, 6],
+        [503, 5, 6],
         [700, 7, 7],
-        [701, 7, 7],
         [100, 1, 5],
-        [1801, 18, 4]
+        [1801, 18, 8]
     ];
 
 }
