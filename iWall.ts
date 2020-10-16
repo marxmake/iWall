@@ -702,7 +702,7 @@ namespace iWall {
     //% weight=202
     //% group="背景"
     //% inlineInputMode=inline
-    //% edge.fieldEditor="gridpicker"
+    //% name.fieldEditor="gridpicker"
     export function iWall_backSet(name: backgroundType.NAME): void {
         if (sendCommand("B_Set:" + convertToText(backgroundType.info[name][backgroundType.NUMBER]) + "\r\n") == "OK") { }
     }
@@ -716,20 +716,20 @@ namespace iWall {
     //% group="背景"
     //% n.min=1 n.max=33
     //% inlineInputMode=inline
-    //% edge.fieldEditor="gridpicker"
+    //% dir.fieldEditor="gridpicker"
     export function iWall_backMove(n: number, dir: MOTIONDIRECT): void {
         if (sendCommand("B_Mov:" + convertToText(n) + ',' + convertToText(dir) + "\r\n") == "OK") { }
     }
 
 	/**
-	 * 背景自动移动。
+	 * 背景自动移动。 
      * @param ms the interval of move, eg: 300, 100
 	*/
     //% blockId=iWall_backAutoMove block="Background Move 1 Step per%ms|ms to %dir"
     //% weight=200
     //% group="背景"
     //% inlineInputMode=inline
-    //% edge.fieldEditor="gridpicker"
+    //% dir.fieldEditor="gridpicker"
     export function iWall_backAutoMove(ms: number, dir: MOTIONDIRECT): void {
         if (sendCommand("B_AutoMove:" + convertToText(ms) + ',' + convertToText(dir) + "\r\n") == "OK") { }
     }
