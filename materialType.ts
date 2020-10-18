@@ -4,89 +4,87 @@ namespace characterType {
     export const HEIGHT = 2;
 
     export enum NAME {
+        //% blockId="ROCKET_WITH_SMALL_FLAME" block="Rocket_With_Small_Flame(9x25)"
+        ROCKET_WITH_SMALL_FLAME = 0,
+        //% blockId="ROCKET_WITH_BIG_FLAME" block="Rocket_With_Big_Flame(9x25)"
+        ROCKET_WITH_BIG_FLAME = 1,
+        //% blockId="ROCKET_WITHOUT_FLAME" block="Rocket_Without_Flame(9x20)"
+        ROCKET_WITHOUT_FLAME = 2,
+        //% blockId="ROCKET_FLAME_SMALL_1" block="Rocket_Flame_Small_1(5x6)"
+        ROCKET_FLAME_SMALL_1 = 3,
+        //% blockId="ROCKET_FLAME_BIG_1" block="Rocket_Flame_Big_1(5x6)"
+        ROCKET_FLAME_BIG_1 = 4,
         //% blockId="LAUNCH_COUNTDOWN_3" block="Launch_Countdown_3(8x14)"
-        LAUNCH_COUNTDOWN_3 = 0,
+        LAUNCH_COUNTDOWN_3 = 5,
         //% blockId="LAUNCH_COUNTDOWN_2" block="Launch_Countdown_2(8x14)"
-        LAUNCH_COUNTDOWN_2 = 1,
+        LAUNCH_COUNTDOWN_2 = 6,
         //% blockId="LAUNCH_COUNTDOWN_1" block="Launch_Countdown_1(8x14)"
-        LAUNCH_COUNTDOWN_1 = 2,
-        //% blockId="LAUNCH_GO" block="Launch_Go(18x14)"
-        LAUNCH_GO = 3,
-        //% blockId="SEPARATE_COUNTDOWN_3" block="Separate_Countdown_3(4x7)"
-        SEPARATE_COUNTDOWN_3 = 4,
-        //% blockId="SEPARATE_COUNTDOWN_2" block="Separate_Countdown_2(4x7)"
-        SEPARATE_COUNTDOWN_2 = 5,
-        //% blockId="SEPARATE_COUNTDOWN_1" block="Separate_Countdown_1(4x7)"
-        SEPARATE_COUNTDOWN_1 = 6,
-        //% blockId="SCORE_0" block="Score_0(3x5)"
-        SCORE_0 = 7,
-        //% blockId="SCORE_1" block="Score_1(3x5)"
-        SCORE_1 = 8,
-        //% blockId="SCORE_2" block="Score_2(3x5)"
-        SCORE_2 = 9,
-        //% blockId="SCORE_3" block="Score_3(3x5)"
-        SCORE_3 = 10,
-        //% blockId="SCORE_4" block="Score_4(3x5)"
-        SCORE_4 = 11,
-        //% blockId="SCORE_5" block="Score_5(3x5)"
-        SCORE_5 = 12,
-        //% blockId="SCORE_6" block="Score_6(3x5)"
-        SCORE_6 = 13,
-        //% blockId="SCORE_7" block="Score_7(3x5)"
-        SCORE_7 = 14,
-        //% blockId="SCORE_8" block="Score_8(3x5)"
-        SCORE_8 = 15,
-        //% blockId="SCORE_9" block="Score_9(3x5)"
-        SCORE_9 = 16,
-        //% blockId="SYMBOL_ADD" block="Symbol(3x3)"
-        SYMBOL_ADD = 17,
+        LAUNCH_COUNTDOWN_1 = 7,
+        //% blockId="LAUNCH_COUNTDOWN_GO" block="Launch_Countdown_Go(18x14)"
+        LAUNCH_COUNTDOWN_GO = 8,
+        //% blockId="LAUNCH_BUTTON" block="Launch_Button(7x7)"
+        LAUNCH_BUTTON = 9,
+        //% blockId="LAUNCH_BUTTON_PRESSED" block="Launch_Button_Pressed(7x7)"
+        LAUNCH_BUTTON_PRESSED = 10,
+        //% blockId="GAME_WIN" block="Game_Win(18x8)"
+        GAME_WIN = 11,
         //% blockId="ROCKET_HEAD" block="Rocket_Head(5x4)"
-        ROCKET_HEAD = 18,
-        //% blockId="ROCKET_BODY_1" block="Rocket_Body_1(5x4)"
-        ROCKET_BODY_1 = 19,
-        //% blockId="ROCKET_BODY_2" block="Rocket_Body_2(5x6)"
-        ROCKET_BODY_2 = 20,
-        //% blockId="ROCKET_BODY_3" block="Rocket_Body_3(9x6)"
-        ROCKET_BODY_3 = 21,
-        //% blockId="ROCKET_FLAME" block="Rocket_Flame(5x6)"
-        ROCKET_FLAME_1 = 22,
+        ROCKET_HEAD = 12,
+        //% blockId="ROCKET_BODY_TOP" block="Rocket_Body_Top(5x4)"
+        ROCKET_BODY_TOP = 13,
+        //% blockId="ROCKET_BODY_MIDDLE" block="Rocket_Body_Middle(5x6)"
+        ROCKET_BODY_MIDDLE = 14,
+        //% blockId="ROCKET_BODY_BOTTOM" block="Rocket_Body_Bottom(9x6)"
+        ROCKET_BODY_BOTTOM = 15,
+        //% blockId="ROCKET_FLAME_SMALL_2" block="Rocket_Flame_Small_2(5x6)"
+        ROCKET_FLAME_SMALL_2 = 16,
+        //% blockId="ROCKET_FLAME_BIG_2" block="Rocket_Flame_Big_2(5x6)"
+        ROCKET_FLAME_BIG_2 = 17,
+        //% blockId="SEPARATE_COUNTDOWN_3" block="Separate_Countdown_3(4x7)"
+        SEPARATE_COUNTDOWN_3 = 18,
+        //% blockId="SEPARATE_COUNTDOWN_2" block="Separate_Countdown_2(4x7)"
+        SEPARATE_COUNTDOWN_2 = 19,
+        //% blockId="SEPARATE_COUNTDOWN_1" block="Separate_Countdown_1(4x7)"
+        SEPARATE_COUNTDOWN_1 = 20,
+        //% blockId="SEPARATE_COUNTDOWN_0" block="Separate_Countdown_0(4x7)"
+        SEPARATE_COUNTDOWN_0 = 21,
         //% blockId="SEPARATE_BUTTON" block="Separate_Button(7x7)"
-        SEPARATE_BUTTON = 23,
+        SEPARATE_BUTTON = 22,
+        //% blockId="SEPARATE_BUTTON_PRESSED" block="Separate_Button_Pressed(7x7)"
+        SEPARATE_BUTTON_PRESSED = 23,
         //% blockId="SEPARATE_AREA" block="Separate_Area(1x5)"
         SEPARATE_AREA = 24,
-        //% blockId="GAME_WIN" block="Game_Win(18x8)"
-        GAME_WIN = 25,
-        //% blockId="TRY_AGAIN" block="Try_Again(29x15)"
-        TRY_AGAIN = 26
+        //% blockId="GAME_WIN_2" block="Game_Win_2(18x8)"
+        GAME_WIN_2 = 25
     }
 
     export const info = [
-        [800, 8, 14],
+        [901, 9, 25],
+        [902, 9, 25],
+        [903, 9, 20],
+        [501, 5, 6],
+        [502, 5, 6],
         [801, 8, 14],
         [802, 8, 14],
-        [1800, 18, 14],
-        [400, 4, 7],
+        [803, 8, 14],
+        [1801, 18, 14],
+        [701, 7, 7],
+        [702, 7, 7],
+        [1802, 18, 8],
+        [503, 5, 4],
+        [504, 5, 4],
+        [505, 5, 6],
+        [904, 9, 6],
+        [506, 5, 6],
+        [507, 5, 6],
         [401, 4, 7],
         [402, 4, 7],
-        [300, 3, 5],
-        [301, 3, 5],
-        [302, 3, 5],
-        [303, 3, 5],
-        [304, 3, 5],
-        [305, 3, 5],
-        [306, 3, 5],
-        [307, 3, 5],
-        [308, 3, 5],
-        [309, 3, 5],
-        [310, 3, 3],
-        [500, 5, 4],
-        [501, 5, 4],
-        [502, 5, 6],
-        [900, 9, 6],
-        [503, 5, 6],
-        [700, 7, 7],
-        [100, 1, 5],
-        [1801, 18, 8]
+        [403, 4, 7],
+        [404, 4, 7],
+        [703, 7, 7],
+        [704, 7, 7],
+        [101, 1, 5],
+        [1803, 18, 8]
     ];
 
 }
@@ -97,15 +95,15 @@ namespace backgroundType {
     export const HEIGHT = 2;
 
     export enum NAME {
-        //% blockId="ROCKET_LAUNCH" block="Rocket_Launch(34x30)"
-        ROCKET_LAUNCH = 0,
-        //% blockId="ROCKET_SEPARATE" block="Rocket_Separate(34x30)"
-        ROCKET_SEPARATE = 1
+        //% blockId="ROCKET_LAUNCH_BACKGROUND" block="Rocket_Launch_Background(34x30)"
+        ROCKET_LAUNCH_BACKGROUND = 0,
+        //% blockId="ROCKET_SEPARATE_BACKGROUND" block="Rocket_Separate_Background(34x30)"
+        ROCKET_SEPARATE_BACKGROUND = 1
     }
 
     export const info = [
-        [0, 34, 30],
-        [1, 34, 30]
+        [3401, 34, 30],
+        [3402, 34, 30]
     ];
 }
 
