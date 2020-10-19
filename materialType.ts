@@ -102,24 +102,12 @@ namespace backMusicType {
     export const NUMBER = 0;
 
     export enum NAME {
-        //% blockId="TEST0" block="Test0"
-        TEST0 = 0,
-        //% blockId="TEST1" block="Test1"
-        TEST1 = 1,
-        //% blockId="TEST2" block="Test2"
-        TEST2 = 2,
-        //% blockId="TEST3" block="Test3"
-        TEST3 = 3,
-        //% blockId="TEST4" block="Test4"
-        TEST4 = 4
+        //% blockId="ROCKET_LAUNCH_BACKGROUND_MUSIC" block="Rocket_Launch_Background_Music"
+        ROCKET_LAUNCH_BACKGROUND_MUSIC = 0
     }
 
     export const info = [
         [0],
-        [1],
-        [2],
-        [3],
-        [4],
     ];
 }
 
@@ -127,23 +115,17 @@ namespace soundType {
     export const NUMBER = 0;
 
     export enum NAME {
-        //% blockId="TEST0" block="Test0"
-        TEST0 = 0,
-        //% blockId="TEST1" block="Test1"
-        TEST1 = 1,
-        //% blockId="TEST2" block="Test2"
-        TEST2 = 2,
-        //% blockId="TEST3" block="Test3"
-        TEST3 = 3,
-        //% blockId="TEST4" block="Test4"
-        TEST4 = 4
+        //% blockId="PRESS_LAUNCH_BUTTON" block="Press_Launch_Button"
+        PRESS_LAUNCH_BUTTON = 0,
+        //% blockId="BO" block="Bo"
+        BO = 1,
+        //% blockId="ROCKET_LAUNCH_SUCCESS" block="Rocket_Launch_Success"
+        ROCKET_LAUNCH_SUCCESS = 2
     }
 
     export const info = [
         [0],
         [1],
         [2],
-        [3],
-        [4],
     ];
 }

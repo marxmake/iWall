@@ -144,5 +144,12 @@
     "characterType.NAME.SEPARATE_COUNTDOWN_0|block": "分离倒计时0(4x7)",
     "characterType.NAME.SEPARATE_BUTTON|block": "分离按钮(7x7)",
     "characterType.NAME.SEPARATE_BUTTON_PRESSED|block": "分离按钮被按下(7x7)",
-    "characterType.NAME.SEPARATE_AREA|block": "分离区域(1x5)"
+    "characterType.NAME.SEPARATE_AREA|block": "分离区域(1x5)",
+
+    "backMusicType.NAME.ROCKET_LAUNCH_BACKGROUND_MUSIC|block": "火箭发射背景音乐",
+
+
+    "soundType.NAME.PRESS_LAUNCH_BUTTON|block": "按下发射按钮",
+    "soundType.NAME.BO|block": "啵",
+    "soundType.NAME.ROCKET_LAUNCH_SUCCESS|block": "火箭发射成功"
 }
