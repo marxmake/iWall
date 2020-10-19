@@ -10,10 +10,10 @@ namespace characterType {
         ROCKET_WITH_BIG_FLAME = 1,
         //% blockId="ROCKET_WITHOUT_FLAME" block="Rocket_Without_Flame(9x20)"
         ROCKET_WITHOUT_FLAME = 2,
-        //% blockId="ROCKET_FLAME_SMALL_1" block="Rocket_Flame_Small_1(5x6)"
-        ROCKET_FLAME_SMALL_1 = 3,
-        //% blockId="ROCKET_FLAME_BIG_1" block="Rocket_Flame_Big_1(5x6)"
-        ROCKET_FLAME_BIG_1 = 4,
+        //% blockId="ROCKET_FLAME_SMALL" block="Rocket_Flame_Small(5x6)"
+        ROCKET_FLAME_SMALL = 3,
+        //% blockId="ROCKET_FLAME_BIG" block="Rocket_Flame_Big(5x6)"
+        ROCKET_FLAME_BIG = 4,
         //% blockId="LAUNCH_COUNTDOWN_3" block="Launch_Countdown_3(8x14)"
         LAUNCH_COUNTDOWN_3 = 5,
         //% blockId="LAUNCH_COUNTDOWN_2" block="Launch_Countdown_2(8x14)"
@@ -36,26 +36,20 @@ namespace characterType {
         ROCKET_BODY_MIDDLE = 14,
         //% blockId="ROCKET_BODY_BOTTOM" block="Rocket_Body_Bottom(9x6)"
         ROCKET_BODY_BOTTOM = 15,
-        //% blockId="ROCKET_FLAME_SMALL_2" block="Rocket_Flame_Small_2(5x6)"
-        ROCKET_FLAME_SMALL_2 = 16,
-        //% blockId="ROCKET_FLAME_BIG_2" block="Rocket_Flame_Big_2(5x6)"
-        ROCKET_FLAME_BIG_2 = 17,
         //% blockId="SEPARATE_COUNTDOWN_3" block="Separate_Countdown_3(4x7)"
-        SEPARATE_COUNTDOWN_3 = 18,
+        SEPARATE_COUNTDOWN_3 = 16,
         //% blockId="SEPARATE_COUNTDOWN_2" block="Separate_Countdown_2(4x7)"
-        SEPARATE_COUNTDOWN_2 = 19,
+        SEPARATE_COUNTDOWN_2 = 17,
         //% blockId="SEPARATE_COUNTDOWN_1" block="Separate_Countdown_1(4x7)"
-        SEPARATE_COUNTDOWN_1 = 20,
+        SEPARATE_COUNTDOWN_1 = 18,
         //% blockId="SEPARATE_COUNTDOWN_0" block="Separate_Countdown_0(4x7)"
-        SEPARATE_COUNTDOWN_0 = 21,
+        SEPARATE_COUNTDOWN_0 = 19,
         //% blockId="SEPARATE_BUTTON" block="Separate_Button(7x7)"
-        SEPARATE_BUTTON = 22,
+        SEPARATE_BUTTON = 20,
         //% blockId="SEPARATE_BUTTON_PRESSED" block="Separate_Button_Pressed(7x7)"
-        SEPARATE_BUTTON_PRESSED = 23,
+        SEPARATE_BUTTON_PRESSED = 21,
         //% blockId="SEPARATE_AREA" block="Separate_Area(1x5)"
-        SEPARATE_AREA = 24,
-        //% blockId="GAME_WIN_2" block="Game_Win_2(18x8)"
-        GAME_WIN_2 = 25
+        SEPARATE_AREA = 22
     }
 
     export const info = [
@@ -75,16 +69,13 @@ namespace characterType {
         [504, 5, 4],
         [505, 5, 6],
         [904, 9, 6],
-        [506, 5, 6],
-        [507, 5, 6],
         [401, 4, 7],
         [402, 4, 7],
         [403, 4, 7],
         [404, 4, 7],
         [703, 7, 7],
         [704, 7, 7],
-        [101, 1, 5],
-        [1803, 18, 8]
+        [101, 1, 5]
     ];
 
 }
