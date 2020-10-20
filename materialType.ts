@@ -39,7 +39,51 @@ namespace characterType {
         //% blockId="SEPARATE_COUNTDOWN_0" block="Separate_Countdown_0(4x7)"
         SEPARATE_COUNTDOWN_0 = 16,
         //% blockId="SEPARATE_AREA" block="Separate_Area(1x5)"
-        SEPARATE_AREA = 17
+        SEPARATE_AREA = 17,
+        //% blockId="GAME_TRY_AGAIN" block="Game_Try_Again(26x13)"
+        GAME_TRY_AGAIN = 18,
+        //% blockId="EXPLODE" block="Explode(9x9)"
+        EXPLODE = 19,
+        //% blockId="BIG_SHOT" block="Gig_Shot(11x4)"
+        BIG_SHOT = 20,
+        //% blockId="AIRCRAFT_1" block="Aircraft_1(11x8)"
+        AIRCRAFT_1 = 21,
+        //% blockId="AIRCRAFT_2" block="Aircraft_2(11x8)"
+        AIRCRAFT_2 = 22,
+        //% blockId="AIRCRAFT_3" block="Aircraft_3(10x9)"
+        AIRCRAFT_3 = 23,
+        //% blockId="AIRCRAFT_4" block="Aircraft_4(9x8)"
+        AIRCRAFT_4 = 24,
+        //% blockId="AIRCRAFT_5" block="Aircraft_5(9x8)"
+        AIRCRAFT_5 = 25,
+        //% blockId="AIRCRAFT_6" block="Aircraft_6(9x9)"
+        AIRCRAFT_6 = 26,
+        //% blockId="DINOSAUR_LEAN_1" block="Dinosaur_Lean_1(12x7)"
+        DINOSAUR_LEAN_1 = 27,
+        //% blockId="DINOSAUR_LEAN_2" block="Dinosaur_Lean_2(14x7)"
+        DINOSAUR_LEAN_2 = 28,
+        //% blockId="DINOSAUR_1" block="Dinosaur_1(11x9)"
+        DINOSAUR_1 = 29,
+        //% blockId="DINOSAUR_2" block="Dinosaur_2(10x9)"
+        DINOSAUR_2 = 30,
+        //% blockId="CACTUS_1" block="Cactus_1(5x10)"
+        CACTUS_1 = 31,
+        //% blockId="CACTUS_2" block="Cactus_2(5x11)"
+        CACTUS_2 = 32,
+        //% blockId="CACTUS_3" block="Cactus_3(5x10)"
+        CACTUS_3 = 33,
+        //% blockId="CACTUS_4" block="Cactus_4(5x8)"
+        CACTUS_4 = 34,
+        //% blockId="CACTUS_5" block="Cactus_5(5x11)"
+        CACTUS_5 = 35,
+        //% blockId="SMALL_SHOT" block="Small_Shot(7x1)"
+        SMALL_SHOT = 36,
+        //% blockId="PTEROSAUR_1" block="Pterosaur_1(11x10)"
+        PTEROSAUR_1 = 37,
+        //% blockId="PTEROSAUR_2" block="Pterosaur_2(12x10)"
+        PTEROSAUR_2 = 38,
+        //% blockId="MIDDLE_SHOT" block="Middle_Shot(7x3)"
+        MIDDLE_SHOT = 39
     }
 
     export const info = [
@@ -60,7 +104,29 @@ namespace characterType {
         [402, 4, 7],
         [403, 4, 7],
         [404, 4, 7],
-        [101, 1, 5]
+        [101, 1, 5],
+        [2601, 26, 13],
+        [904, 9, 9],
+        [1101, 11, 4],
+        [1102, 11, 8],
+        [1103, 11, 8],
+        [1001, 10, 9],
+        [905, 9, 8],
+        [906, 9, 8],
+        [907, 9, 9],
+        [1201, 12, 7],
+        [1401, 14, 7],
+        [1104, 11, 9],
+        [1002, 10, 9],
+        [505, 5, 10],
+        [506, 5, 11],
+        [507, 5, 10],
+        [508, 5, 8],
+        [509, 5, 11],
+        [702, 7, 1],
+        [1105, 11, 10],
+        [1202, 12, 10],
+        [703, 7, 3]
     ];
 
 }
@@ -74,14 +140,19 @@ namespace backgroundType {
         //% blockId="ROCKET_LAUNCH" block="Rocket_Launch(34x30)"
         ROCKET_LAUNCH = 0,
         //% blockId="ROCKET_SEPARATE" block="Rocket_Separate(34x30)"
-        ROCKET_SEPARATE = 1
+        ROCKET_SEPARATE = 1,
+        //% blockId="AIRCRAFT_BATTLE" block="Aircraft_Battle(34x30)"
+        AIRCRAFT_BATTLE = 2,
+        //% blockId="DINOSAUR" block="Dinosaur(34x30)"
+        DINOSAUR = 3
     }
 
     export const info = [
         [3401, 34, 30],
-        [3402, 34, 30]
+        [3402, 34, 30],
+        [3403, 34, 30],
+        [3404, 34, 30]
     ];
-
 }
 
 namespace backMusicType {
@@ -91,12 +162,21 @@ namespace backMusicType {
         //% blockId="ROCKET_LAUNCH" block="Rocket_Launch"
         ROCKET_LAUNCH = 0,
         //% blockId="ROCKED_SEPARATE" block="Rocket_Separate"
-        ROCKED_SEPARATE = 1
+        ROCKED_SEPARATE = 1,
+        //% blockId="AIRCRAFT_BATTLE_SOUND_1" block="Aircraft_Battle_Sound_1"
+        AIRCRAFT_BATTLE_SOUND_1 = 2,
+        //% blockId="AIRCRAFT_BATTLE_SOUND_2" block="Aircraft_Battle_Sound_2"
+        AIRCRAFT_BATTLE_SOUND_2 = 3,
+        //% blockId="DINOSAUR_SOUND" block="Dinosaur_Sound"
+        DINOSAUR_SOUND = 4
     }
 
     export const info = [
         [0],
-        [1]
+        [1],
+        [2],
+        [3],
+        [4]
     ];
 }
 
@@ -115,7 +195,21 @@ namespace soundType {
         //% blockId="MAGIC_SOUND" block="Magic_Sound"
         MAGIC_SOUND = 4,
         //% blockId="GAME_WIN" block="Game_Win"
-        GAME_WIN = 5
+        GAME_WIN = 6,
+        //% blockId="SUCCESS" block="Success"
+        SUCCESS = 7,
+        //% blockId="DINOSAUR_ATTACK" block="Dinosaur_Attack"
+        DINOSAUR_ATTACK = 8,
+        //% blockId="PARKOUR_COUNTDOWN" block="Parkour_Countdown"
+        PARKOUR_COUNTDOWN = 9,
+        //% blockId="PARKOUR_WIN" block="Parkour_Win"
+        PARKOUR_WIN = 10,
+        //% blockId="PARKOUR_JUMP" block="Parkour_Jump"
+        PARKOUR_JUMP = 11,
+        //% blockId="FAILURE" block="Failure"
+        FAILURE = 12,
+        //% blockId="BOMB_EXPLODE" block="Bomb_Explode"
+        BOMB_EXPLODE = 13
     }
 
     export const info = [
@@ -124,6 +218,14 @@ namespace soundType {
         [2],
         [3],
         [4],
-        [5]
+        [5],
+        [6],
+        [7],
+        [8],
+        [9],
+        [10],
+        [11],
+        [12],
+        [13]
     ];
 }

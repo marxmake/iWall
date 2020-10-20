@@ -963,6 +963,7 @@ namespace iWall {
     //% blockId=iWall_musicBackPlay block="Play Back Music%name"
     //% group="音乐"
     //% inlineInputMode=inline
+    //% name.fieldEditor="gridpicker" name.fieldOptions.columns=5
     export function iWall_musicBackPlay(name: backMusicType.NAME): void {
         if (sendCommand("M_Play:" + convertToText(backMusicType.info[name][backMusicType.NUMBER]) + "\r\n") == "OK") { }
     }
@@ -1007,6 +1008,7 @@ namespace iWall {
     //% blockId=iWall_musicSoundPlay block="Play Sound%name"
     //% group="音乐"
     //% inlineInputMode=inline
+    //% name.fieldEditor="gridpicker" name.fieldOptions.columns=5
     export function iWall_musicSoundPlay(name: soundType.NAME): void {
         if (sendCommand("M_SPlay:" + convertToText(soundType.info[name][soundType.NUMBER]) + "\r\n") == "OK") { }
     }
