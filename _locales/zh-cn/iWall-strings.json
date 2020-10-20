@@ -119,20 +119,17 @@
     "iWall.EDGE_MODE.REBOUND|block": "反弹",
     "iWall.EDGE_MODE.INTERLINK|block": "另一侧飞出",
 
-    "backgroundType.NAME.ROCKET_LAUNCH_BACKGROUND|block": "火箭发射背景(34x30)",
-    "backgroundType.NAME.ROCKET_SEPARATE_BACKGROUND|block": "火箭分离背景(34x30)",
+    "backgroundType.NAME.ROCKET_LAUNCH|block": "火箭发射(34x30)",
+    "backgroundType.NAME.ROCKET_SEPARATE|block": "火箭分离(34x30)",
 
-    "characterType.NAME.ROCKET_WITH_SMALL_FLAME|block": "火箭带小火焰(9x25)",
-    "characterType.NAME.ROCKET_WITH_BIG_FLAME|block": "火箭带大火焰(9x25)",
+    "characterType.NAME.ROCKET_WITH_FLAME|block": "火箭带火焰(9x25)",
     "characterType.NAME.ROCKET_WITHOUT_FLAME|block": "火箭不带火焰(9x20)",
-    "characterType.NAME.ROCKET_FLAME_SMALL|block": "火箭小火焰(5x6)",
-    "characterType.NAME.ROCKET_FLAME_BIG|block": "火箭大火焰(5x6)",
+    "characterType.NAME.ROCKET_FLAME|block": "火箭火焰(5x6)",
     "characterType.NAME.LAUNCH_COUNTDOWN_3|block": "发射倒计时3(8x14)",
     "characterType.NAME.LAUNCH_COUNTDOWN_2|block": "发射倒计时2(8x14)",
     "characterType.NAME.LAUNCH_COUNTDOWN_1|block": "发射倒计时1(8x14)",
     "characterType.NAME.LAUNCH_COUNTDOWN_GO|block": "发射倒计时Go(18x14)",
-    "characterType.NAME.LAUNCH_BUTTON|block": "发射按钮(7x7)",
-    "characterType.NAME.LAUNCH_BUTTON_PRESSED|block": "发射按钮被按下(7x7)",
+    "characterType.NAME.LAUNCH_BUTTON|block": "火箭按钮(7x7)",
     "characterType.NAME.GAME_WIN|block": "游戏胜利(18x8)",
     "characterType.NAME.ROCKET_HEAD|block": "火箭头部(5x4)",
     "characterType.NAME.ROCKET_BODY_TOP|block": "火箭身体顶部(5x4)",
@@ -142,14 +139,15 @@
     "characterType.NAME.SEPARATE_COUNTDOWN_2|block": "分离倒计时2(4x7)",
     "characterType.NAME.SEPARATE_COUNTDOWN_1|block": "分离倒计时1(4x7)",
     "characterType.NAME.SEPARATE_COUNTDOWN_0|block": "分离倒计时0(4x7)",
-    "characterType.NAME.SEPARATE_BUTTON|block": "分离按钮(7x7)",
-    "characterType.NAME.SEPARATE_BUTTON_PRESSED|block": "分离按钮被按下(7x7)",
     "characterType.NAME.SEPARATE_AREA|block": "分离区域(1x5)",
 
-    "backMusicType.NAME.ROCKET_LAUNCH_BACKGROUND_MUSIC|block": "火箭发射背景音乐",
+    "backMusicType.NAME.ROCKET_LAUNCH|block": "火箭发射背景音乐",
+    "backMusicType.NAME.ROCKED_SEPARATE|block": "火箭分离背景音乐",
 
-
-    "soundType.NAME.PRESS_LAUNCH_BUTTON|block": "按下发射按钮",
+    "soundType.NAME.PUSH_BUTTON|block": "按下发射按钮",
     "soundType.NAME.BO|block": "啵",
-    "soundType.NAME.ROCKET_LAUNCH_SUCCESS|block": "火箭发射成功"
+    "soundType.NAME.ROCKET_LAUNCH_SUCCESS|block": "火箭发射成功",
+    "soundType.NAME.ROCKET_HEAD_LAUNCH|block": "火箭头部发射",
+    "soundType.NAME.MAGIC_SOUND|block": "魔法音效",
+    "soundType.NAME.GAME_WIN|block": "游戏胜利"
 }
