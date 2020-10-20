@@ -405,7 +405,7 @@ namespace iWall {
         char.number = characterType.info[type][characterType.NUMBER];
         char.width = characterType.info[type][characterType.WIDTH];
         char.height = characterType.info[type][characterType.HEIGHT];
-        if (sendCommand("C_SetG:" + convertToText(idx) + ',' + convertToText(char.number) + "\r\n") == "OK") { }
+        if (sendCommand("C_SetGraph:" + convertToText(idx) + ',' + convertToText(char.number) + "\r\n") == "OK") { }
     }
 
 	/**
@@ -676,8 +676,13 @@ namespace iWall {
     //% group="角色"
     //% inlineInputMode=inline
     export function iWall_characterGetCharsCollision(char1: Character, char2: Character): boolean {
-        if ((Math.abs(char1.x - char2.x) * 2 < char1.width + char2.width) &&
-            (Math.abs(char1.y - char2.y) * 2 < char1.height + char2.height)) {
+        let c1_new_width = Math.floor(char1.graphDirect / 2) ? char1.height : char1.width
+        let c1_new_height = Math.floor(char1.graphDirect / 2) ? char1.width : char1.height
+        let c2_new_width = Math.floor(char2.graphDirect / 2) ? char2.height : char2.width
+        let c2_new_height = Math.floor(char2.graphDirect / 2) ? char2.width : char2.height
+
+        if ((Math.abs(char1.x - char2.x) * 2 < c1_new_width + c2_new_width) &&
+            (Math.abs(char1.y - char2.y) * 2 < c1_new_height + c2_new_height)) {
             return true;
         }
         return false
