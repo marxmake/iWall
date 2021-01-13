@@ -40,6 +40,10 @@
     "iWall.iWall_LEDMatrixRect|block": "画矩形 左上 X|%x0|Y|%y0|右下 X|%x1|Y|%y1|颜色|%rgb|模式|%mode|",
     "iWall.iWall_LEDMatrixShift|block": "画面移动 方向|%dir|格数|%num|",
     
+    "iWall.iWall_createTextFrame|block": "创建文本框 X|%x|Y|%y|字体|%font|宽|%width",
+    "iWall.iWall_textSetXY|block": "文本框%txt|移动到 X%x|Y%y",
+    "iWall.iWall_textSetText|block": "文本框%txt|设置文字%str|颜色%rgb",
+    
     "iWall.iWall_musicBackPlay|block": "播放背景音乐%name",
     "iWall.iWall_musicBackPause|block": "背景音乐暂停",
     "iWall.iWall_musicBackStop|block": "背景音乐停止",
@@ -67,7 +71,9 @@
     "iWall.SENSOR_DATA.RFID|block": "RFID检测卡号(1~24)",
     "iWall.SENSOR_DATA.TOUCH_KEY|block": "触摸按键(1~8)",
     "iWall.SENSOR_DATA.LUMINATION|block": "光照强度(Lux)",
-    "iWall.SENSOR_DATA.COLOR|block": "颜色检测(1~6)",
+    "iWall.SENSOR_DATA.COLOR_R|block": "颜色检测 红色(0~255)",
+    "iWall.SENSOR_DATA.COLOR_G|block": "颜色检测 绿色(0~255)",
+    "iWall.SENSOR_DATA.COLOR_B|block": "颜色检测 蓝色(0~255)",
     "iWall.SENSOR_DATA.HEART_RATE|block": "心率传感器(/sec)",
     "iWall.SENSOR_DATA.GESTURE|block": "手势传感器(μg/m³)",
     "iWall.SENSOR_DATA.MAGNET|block": "磁场强度(Gs)",
@@ -118,6 +124,9 @@
     "iWall.EDGE_MODE.HALT|block": "停止",
     "iWall.EDGE_MODE.REBOUND|block": "反弹",
     "iWall.EDGE_MODE.INTERLINK|block": "另一侧飞出",
+
+    "iWall.FONT.ASCII_5X5|block": "5X5(字母+数字)",
+    "iWall.FONT.ASCII_10X10|block": "10X10(字母+数字)",
 
     "backgroundType.NAME.ROCKET_LAUNCH|block": "火箭发射(34x30)",
     "backgroundType.NAME.ROCKET_SEPARATE|block": "火箭分离(34x30)",

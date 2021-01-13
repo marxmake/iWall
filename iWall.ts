@@ -14,7 +14,7 @@ const Y_MAX = 29;
 //% weight=3
 //% color=#eeaa00
 //% icon="\uf00a"
-//% groups="['传感器', '绘图', '角色', '背景', '音乐']"
+//% groups="['传感器', '绘图', '角色', '背景', '音乐', '文字']"
 namespace iWall {
 
     export enum SENSOR {
@@ -61,8 +61,12 @@ namespace iWall {
         TOUCH_KEY = 5,
         //% blockId="LUMINATION" block="Lumination"
         LUMINATION = 6,
-        //% blockId="COLOR" block="Color"
-        COLOR = 7,
+        //% blockId="COLOR_R" block="Color_R"
+        COLOR_R = 7,
+        //% blockId="COLOR_G" block="Color_G"
+        COLOR_G = 13,
+        //% blockId="COLOR_B" block="Color_B"
+        COLOR_B = 14,
         //% blockId="HEART_RATE" block="Heart Rate"
         HEART_RATE = 8,
         //% blockId="GESTURE" block="Gesture"
@@ -89,6 +93,13 @@ namespace iWall {
         LEFT = 2,
         //% blockId="RIGHT" block="Right"
         RIGHT = 3
+    }
+
+    export enum FONT {
+        //% blockId="ASCII_5X5" block="5X5(ASCII)"
+        ASCII_5X5 = 4,
+        //% blockId="ASCII_10X10" block="10X10(ASCII)"
+        ASCII_10X10 = 5
     }
 
 	/**
@@ -789,19 +800,12 @@ namespace iWall {
         let idx = sensor;
         let data = 0;
         if (sensor == SENSOR_DATA.HUMI) idx = SENSOR_DATA.TEMP;
+        if (sensor == SENSOR_DATA.COLOR_G || sensor == SENSOR_DATA.COLOR_B) idx = SENSOR_DATA.COLOR_R;
         let tmp_str = sendCommand("S_Get:" + convertToText(idx) + "\r\n");
-        if ((tmp_str.charAt(0) == 'O') && (tmp_str.charAt(1) == 'K')) {
+        if (tmp_str.charAt(0) == 'O' && tmp_str.charAt(1) == 'K') {
             let len = 0;
             let tmp_char;
-            if (sensor != SENSOR_DATA.HUMI) {
-                for (; len < tmp_str.length - 4; len++) {
-                    tmp_char = tmp_str.charAt(len + 3)
-                    if (!((tmp_char >= '-') && (tmp_char <= '9') && (tmp_char != '/'))) {
-                        break;
-                    }
-                }
-                data = parseFloat(tmp_str.substr(3, len))
-            } else {
+            if (sensor == SENSOR_DATA.HUMI || sensor == SENSOR_DATA.COLOR_G) {
                 let i = 0;
                 for (; i < tmp_str.length - 4; i++) {
                     tmp_char = tmp_str.charAt(i + 3)
@@ -816,6 +820,34 @@ namespace iWall {
                     }
                 }
                 data = parseFloat(tmp_str.substr(4 + i, len))
+            } else if (sensor == SENSOR_DATA.COLOR_B) {
+                let i = 0;
+                let j = 0;
+                for (j = 0; j < 2; j++) {
+                    for (; i < tmp_str.length - 4; i++) {
+                        tmp_char = tmp_str.charAt(i + 3)
+                        if (tmp_char == ',') {
+                            break;
+                        }
+                    }
+                    i++
+                }
+                i--
+                for (; len < tmp_str.length - 4; len++) {
+                    tmp_char = tmp_str.charAt(len + 4 + i)
+                    if (!((tmp_char >= '-') && (tmp_char <= '9') && (tmp_char != '/'))) {
+                        break;
+                    }
+                }
+                data = parseFloat(tmp_str.substr(4 + i, len))
+            } else {
+                for (; len < tmp_str.length - 4; len++) {
+                    tmp_char = tmp_str.charAt(len + 3)
+                    if (!((tmp_char >= '-') && (tmp_char <= '9') && (tmp_char != '/'))) {
+                        break;
+                    }
+                }
+                data = parseFloat(tmp_str.substr(3, len))
             }
         }
         return data;
@@ -944,7 +976,7 @@ namespace iWall {
         }
 
     /**
-     * iWall点阵屏绘制矩形
+     * iWall点阵屏画布移动
 	 * @param num [1-34] ; eg: 1, 25
      */
     //% weight=100
@@ -957,6 +989,97 @@ namespace iWall {
             convertToText(dir) + ',' +
             convertToText(num) + ',' +
             "\r\n") == "OK") { }
+    }
+
+
+    export class TextFrame {
+        x: number;
+        y: number;
+        width: number;
+        font: FONT;
+
+        constructor(x: number, y: number, font: FONT, width: number) {
+            this.x = x;
+            this.y = y;
+            this.width = width;
+            this.font = font;
+        }
+    }
+
+    let TextFrames: TextFrame[] = [];
+
+    /**
+     * iWall点阵屏创建文本框
+	 * @param width [1-34] ; eg: 10, 25
+     */
+    //% x.min=0 x.max=33
+    //% y.min=0 y.max=29
+    //% weight=90
+    //% blockId=iWall_createTextFrame block="iWall Create Text Frame X|%x|Y|%y|Font|%font|width|%width"
+    //% group="文字"
+    //% inlineInputMode=inline
+    export function iWall_createTextFrame(x: number, y: number, font: FONT, width: number): TextFrame {
+        if (width + x > 34) {
+            width = 34 - x;
+        }
+
+        let txt = new TextFrame(x, y, font, width);
+        TextFrames.push(txt);
+        
+        if (sendCommand(
+            "T_New:" +
+            convertToText(x) + ',' +
+            convertToText(y) + ',' +
+            convertToText(font) + ',' +
+            convertToText(width) + "\r\n") == "OK") { }
+        
+        return txt;
+    }
+
+    /**
+     * iWall点阵屏文本框设置位置
+     */
+    //% x.min=0 x.max=33
+    //% y.min=0 y.max=29
+    //% weight=89
+    //% blockId=iWall_textSetXY block="iWall Set Text X|%x|Y|%y"
+    //% group="文字"
+    //% inlineInputMode=inline
+    export function iWall_textSetXY(txt: TextFrame, x: number, y: number): void {
+        let idx = TextFrames.indexOf(txt);
+        if (idx == -1) return;
+        
+        if (sendCommand(
+            "T_XY:" +
+            convertToText(idx) + ',' +
+            convertToText(x) + ',' +
+            convertToText(y) + "\r\n") == "OK") { }
+    }
+
+    /**
+     * iWall点阵屏文本框设置文字
+	 * @param rgb eg: 0xFFFFFF
+     */
+    //% weight=88
+    //% rgb.shadow="colorNumberPicker"
+    //% blockId=iWall_textSetText block="iWall Set Text Frame|%txt|String|%str|Color|%rgb"
+    //% group="文字"
+    //% inlineInputMode=inline
+    export function iWall_textSetText(txt: TextFrame, str: string, rgb: number): void {
+        let r = rgb >> 16;
+        let g = (rgb >> 8) & 0xFF;
+        let b = (rgb) & 0xFF;
+
+        let idx = TextFrames.indexOf(txt);
+        if (idx == -1) return;
+        
+        if (sendCommand(
+            "T_Set:" +
+            convertToText(idx) + ',\"' +
+            str + "\"," +
+            convertToText(r) + ',' +
+            convertToText(g) + ',' +
+            convertToText(b) + "\r\n") == "OK") { }
     }
 
 
