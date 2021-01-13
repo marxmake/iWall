@@ -83,7 +83,35 @@ namespace characterType {
         //% blockId="PTEROSAUR_2" block="Pterosaur_2(12x10)"
         PTEROSAUR_2 = 38,
         //% blockId="MIDDLE_SHOT" block="Middle_Shot(7x3)"
-        MIDDLE_SHOT = 39
+        MIDDLE_SHOT = 39,
+        //% blockId="MARBLE_BALL" block="Marble_Ball(2x2)"
+        MARBLE_BALL = 40,
+        //% blockId="PEN" block="Pen(3x3)"
+        PEN = 41,
+        //% blockId="WHITE_NUMBER_0" block="White_Number_0(4x7)"
+        WHITE_NUMBER_0 = 42,
+        //% blockId="WHITE_NUMBER_1" block="White_Number_1(4x7)"
+        WHITE_NUMBER_1 = 43,
+        //% blockId="WHITE_NUMBER_2" block="White_Number_2(4x7)"
+        WHITE_NUMBER_2 = 44,
+        //% blockId="WHITE_NUMBER_3" block="White_Number_3(4x7)"
+        WHITE_NUMBER_3 = 45,
+        //% blockId="WHITE_NUMBER_4" block="White_Number_4(4x7)"
+        WHITE_NUMBER_4 = 46,
+        //% blockId="WHITE_NUMBER_5" block="White_Number_5(4x7)"
+        WHITE_NUMBER_5 = 47,
+        //% blockId="WHITE_NUMBER_6" block="White_Number_6(4x7)"
+        WHITE_NUMBER_6 = 48,
+        //% blockId="WHITE_NUMBER_7" block="White_Number_7(4x7)"
+        WHITE_NUMBER_7 = 49,
+        //% blockId="WHITE_NUMBER_8" block="White_Number_8(4x7)"
+        WHITE_NUMBER_8 = 50,
+        //% blockId="WHITE_NUMBER_9" block="White_Number_9(4x7)"
+        WHITE_NUMBER_9 = 51,
+        //% blockId="ROCKET_WITH_BIG_FLAME" block="Rocket_With_Big_Flame(9x25)"
+        ROCKET_WITH_BIG_FLAME = 52,
+        //% blockId="ROCKET_WITH_SMALL_FLAME" block="Rocket_With_Small_Flame(9x25)"
+        ROCKET_WITH_SMALL_FLAME = 53
     }
 
     export const info = [
@@ -126,7 +154,21 @@ namespace characterType {
         [702, 7, 1],
         [1105, 11, 10],
         [1202, 12, 10],
-        [703, 7, 3]
+        [703, 7, 3],
+        [201, 2, 2],
+        [301, 3, 3],
+        [405, 4, 7],
+        [406, 4, 7],
+        [407, 4, 7],
+        [408, 4, 7],
+        [409, 4, 7],
+        [410, 4, 7],
+        [411, 4, 7],
+        [412, 4, 7],
+        [413, 4, 7],
+        [414, 4, 7],
+        [908, 9, 25],
+        [909, 9, 25]
     ];
 
 }
@@ -144,14 +186,20 @@ namespace backgroundType {
         //% blockId="AIRCRAFT_BATTLE" block="Aircraft_Battle(34x30)"
         AIRCRAFT_BATTLE = 2,
         //% blockId="DINOSAUR" block="Dinosaur(34x30)"
-        DINOSAUR = 3
+        DINOSAUR = 3,
+        //% blockId="MARBLE" block="Marble(34x30)"
+        MARBLE = 4,
+        //% blockId="MATTS" block="Matts(34x30)"
+        MATTS = 5
     }
 
     export const info = [
         [3401, 34, 30],
         [3402, 34, 30],
         [3403, 34, 30],
-        [3404, 34, 30]
+        [3404, 34, 30],
+        [3405, 34, 30],
+        [3406, 34, 30]
     ];
 }
 
