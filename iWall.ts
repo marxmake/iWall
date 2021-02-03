@@ -623,10 +623,10 @@ namespace iWall {
         
         let new_idx = 0;
         switch (layer) {
-            case LAYER_MODE.TOP: if (idx > 0) new_idx = 0; break;
-            case LAYER_MODE.PREVIOUS: if (idx > 0) new_idx = idx - 1; break;
-            case LAYER_MODE.LATTER: if (idx < charactors.length - 1)  new_idx = idx + 1; break;
-            case LAYER_MODE.BOTTOM: if (idx < charactors.length - 1)  new_idx = charactors.length - 1; break;
+            case LAYER_MODE.TOP: if (idx < charactors.length - 1)  new_idx = charactors.length - 1; break;
+            case LAYER_MODE.PREVIOUS: if (idx < charactors.length - 1)  new_idx = idx + 1; break;
+            case LAYER_MODE.LATTER: if (idx > 0) new_idx = idx - 1; break;
+            case LAYER_MODE.BOTTOM: if (idx > 0) new_idx = 0; break;
         }
         charactors.splice(idx, 1);
         charactors.insertAt(new_idx, char);
@@ -692,8 +692,20 @@ namespace iWall {
         let c2_new_width = Math.floor(char2.graphDirect / 2) ? char2.height : char2.width
         let c2_new_height = Math.floor(char2.graphDirect / 2) ? char2.width : char2.height
 
-        if ((Math.abs(char1.x - char2.x) * 2 < c1_new_width + c2_new_width) &&
-            (Math.abs(char1.y - char2.y) * 2 < c1_new_height + c2_new_height)) {
+        let c1_left_x = char1.x - Math.floor((c1_new_width - 1) / 2)
+        let c1_up_y = char1.y - Math.floor((c1_new_height - 1) / 2)
+        let c1_right_x = char1.x + Math.floor(c1_new_width / 2)
+        let c1_down_y = char1.y + Math.floor(c1_new_height / 2)
+
+        let c2_left_x = char2.x - Math.floor((c2_new_width - 1) / 2)
+        let c2_up_y = char2.y - Math.floor((c2_new_height - 1) / 2)
+        let c2_right_x = char2.x + Math.floor(c2_new_width / 2)
+        let c2_down_y = char2.y + Math.floor(c2_new_height / 2)
+
+        if ((c1_left_x <= c2_right_x) &&
+            (c1_right_x >= c2_left_x) &&
+            (c1_up_y <= c2_down_y) &&
+            (c1_down_y >= c2_up_y)) {
             return true;
         }
         return false

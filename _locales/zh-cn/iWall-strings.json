@@ -75,7 +75,7 @@
     "iWall.SENSOR_DATA.COLOR_G|block": "颜色检测 绿色(0~255)",
     "iWall.SENSOR_DATA.COLOR_B|block": "颜色检测 蓝色(0~255)",
     "iWall.SENSOR_DATA.HEART_RATE|block": "心率传感器(/sec)",
-    "iWall.SENSOR_DATA.GESTURE|block": "手势传感器(μg/m³)",
+    "iWall.SENSOR_DATA.GESTURE|block": "手势传感器(1~8)",
     "iWall.SENSOR_DATA.MAGNET|block": "磁场强度(Gs)",
     "iWall.SENSOR_DATA.PRESSURE|block": "压力传感器(N)",
 
